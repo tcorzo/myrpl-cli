@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "myrpl-cli"
-version = "0.1.0"
+version = "0.2.0"
 description = "A script to fetch and save course activities from myrpl.ar"
 authors = ["tcorzo"]
 

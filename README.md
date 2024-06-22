@@ -24,7 +24,7 @@ poetry build
 4. Install the package globally:
 
 ```bash
-pip install dist/myrpl_cli-0.1.0-py3-none-any.whl
+pip install dist/myrpl_cli-0.2.0-py3-none-any.whl
 ```
 
 Now you can use the `myrpl` command!
@@ -36,6 +36,7 @@ To use MyRPL CLI, you need a bearer token for authentication. You can provide th
 ### Setting up the bearer token
 
 Option 1: Set an environment variable
+
 ```bash
 export MYRPL_BEARER_TOKEN=your_bearer_token_here
 ```
@@ -55,6 +56,7 @@ Example:
 ```bash
 poetry run myrpl fetch 57
 ```
+
 Or with explicit token:
 
 ```bash
@@ -64,6 +66,7 @@ poetry run myrpl fetch 57 --token your_bearer_token_here
 ### Getting help
 
 For general help:
+
 ```bash
 poetry run myrpl --help
 ```
@@ -114,4 +117,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Authors
 
-- tcorzo
+-   tcorzo
