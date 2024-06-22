@@ -2,7 +2,7 @@
 
 MyRPL CLI is a command-line interface tool for fetching and saving course activities from myrpl.ar.
 
-## Installation
+## Installation 🛠️
 
 This project uses Poetry for dependency management. To install, follow these steps:
 
@@ -27,13 +27,25 @@ poetry build
 pip install dist/myrpl_cli-0.2.0-py3-none-any.whl
 ```
 
-Now you can use the `myrpl` command!
+Now you can use the myrpl command! 🎉
 
-## Usage
+## Usage 📚
 
 To use MyRPL CLI, you need a bearer token for authentication. You can provide this token either as an environment variable (even within a .env file) or as a command-line argument.
 
-### Setting up the bearer token
+### Logging In 🔑
+
+Before fetching course activities, you need to log in and store your credentials securely. Use the login command:
+
+```bash
+myrpl login
+```
+
+This will prompt you for your username/email and password and store your credentials securely in an encrypted file. You'll also be asked for a passphrase to encrypt said file.🔒 NOTE: Each time you use `myrpl` you'll be prompted for the passphrase.
+
+You can always overwrite the stored credentials by running the `login` command again
+
+### (Optional) Setting up the bearer token 🛡️
 
 Option 1: Set an environment variable
 
@@ -43,7 +55,9 @@ export MYRPL_BEARER_TOKEN=your_bearer_token_here
 
 Option 2: Provide the token as a command-line argument (see examples below)
 
-### Fetching course activities
+### Fetching course activities 🎓
+
+First, `cd` into the directory where you want your courses and activities stored
 
 To fetch activities for a specific course:
 
@@ -51,19 +65,30 @@ To fetch activities for a specific course:
 poetry run myrpl fetch <course_id> [--token YOUR_BEARER_TOKEN]
 ```
 
-Example:
+This will create a file structure in the current working directory like follows:
 
 ```bash
-poetry run myrpl fetch 57
+./
+└── courses/
+    └── {course 1}/
+        ├── {category 1}/
+        │   ├── description.txt
+        │   ├── {activity 1}/
+        │   │   ├── description.md
+        │   │   ├── unit_test.py
+        │   │   └── main.py
+        │   ├── {activity 2}/
+        ┊   ┊
 ```
 
-Or with explicit token:
+### Getting some actual work done 🧑‍💻
 
-```bash
-poetry run myrpl fetch 57 --token your_bearer_token_here
-```
+-   `cd` into any activity
+-   Launch your IDE of choice. eg.: `code .` for VS Code
+-   You can see the activity's description, initial code and unit tests
+-   Write your code and run the tests using `pytest`
 
-### Getting help
+### Getting help ❓
 
 For general help:
 
@@ -77,7 +102,7 @@ For help with the a specific command:
 poetry run myrpl {command} --help
 ```
 
-## Project Structure
+## Project Structure 🏗️
 
 ```bash
 myrpl-cli/
@@ -85,11 +110,13 @@ myrpl-cli/
 ├── README.md
 └── myrpl_cli/
     ├── __init__.py
-    └── main.py
-    └── myrpl_api.py
+    ├── api.py
+    ├── credential_manager.py
+    ├── main.py
+    └── myrpl.py
 ```
 
-## Development
+## Development 👩‍💻👨‍💻
 
 To set up the development environment:
 
@@ -105,16 +132,16 @@ poetry install
 poetry shell
 ```
 
-3. Off you go!
+3. Off you go! 🚀
 
-## Contributing
+## Contributing 🤝
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## License 📜
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Authors
+## Authors 👥
 
--   tcorzo
+-   tcorzo 🧑🏾‍🦲
