@@ -65,7 +65,10 @@ class MyRPL:
         file_id = activity_info['file_id']
 
         initial_code = self.api.fetch_initial_code(file_id)
-        main_py_content = initial_code.get('main.py', '')
+        submission_filenames = [key for key in initial_code if key.endswith('.py')]
+        submission_files = {}
+        for filename in submission_filenames:
+            submission_files[filename] = initial_code.get(filename, '')
 
         base_path = f'./courses/{course_name}/{category_name}/{activity_name}'
         os.makedirs(base_path, exist_ok=True)
@@ -77,8 +80,8 @@ class MyRPL:
 
         files_to_save = {
             'description.md': description,
-            'main.py': main_py_content,
-            'unit_test.py': unit_tests
+            'unit_test.py': unit_tests,
+            **submission_files
         }
 
         for filename, content in files_to_save.items():
