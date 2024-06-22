@@ -3,11 +3,14 @@ from tqdm import tqdm
 import logging
 import getpass
 
+from myrpl_cli.api import API
+from myrpl_cli.credential_manager import CredentialManager
+
 logger = logging.getLogger(__name__)
 
 class MyRPL:
 
-    def __init__(self, api, cred_mgr):
+    def __init__(self, api: API, cred_mgr: CredentialManager):
         self.api = api
         self.cred_mgr = cred_mgr
         self.api_token = None
@@ -86,31 +89,3 @@ class MyRPL:
 
         pbar.update(1)
         pbar.set_description(f"Saved: {activity_name}")
-
-    def auth_api_call(self):
-        if self.api_token is None:
-            self.api_token = self.get_api_token()
-        # try request
-
-    def get_api_token(self):
-        if self.api_token:
-            return self.api_token
-
-        self.api_token = self.cred_mgr.get_stored_token()
-        if self.api_token:
-            return self.api_token
-
-        username, password = self.cred_mgr.get_stored_credentials()
-        if not username or not password:
-            username, password = self.login()
-
-        login_result = self.api.login(username, password)
-        self.api_token = login_result['access_token']
-        if self.api_token:
-            return self.api_token
-
-        raise Exception('All authentication methods failed')
-
-    def invalidate_token(self):
-        self.api_token = None
-        self.cred_mgr.store_token(None)

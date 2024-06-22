@@ -11,10 +11,10 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def login_command(myrpl):
+def login_command(myrpl: MyRPL):
     myrpl.login()
 
-def fetch_command(myrpl, args):
+def fetch_command(myrpl: MyRPL, args):
     myrpl.fetch_course(args.course_id, args.token, args.force)
 
 def main():
@@ -29,8 +29,8 @@ def main():
 
     args = parser.parse_args()
 
-    api = API()
     cred_mgr = CredentialManager()
+    api = API(cred_mgr)
     myrpl = MyRPL(api, cred_mgr)
 
     if args.command == "login":
