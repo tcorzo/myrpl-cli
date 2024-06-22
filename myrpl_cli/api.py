@@ -1,18 +1,45 @@
+# api.py
+
+import json
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import mimetypes
 
 BASE_URL = 'https://myrpl.ar'
 
-class MYRPL_API:
-    headers = {}
-
-    def __init__(self, bearer_token) -> None:
-        self.headers = {
+class API:
+    headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
-            'Authorization': f'Bearer {bearer_token}',
             'Content-Type': 'application/json'
         }
+
+    def __init__(self, bearer_token = None) -> None:
+        if not bearer_token is None:
+            self.headers['Authorization'] = f"Bearer {bearer_token}"
+
+    def login(self, username_or_email, password):
+        login_url = f'{BASE_URL}/api/auth/login'
+
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
+            'Content-Type': 'application/json',
+        }
+
+        payload = {
+            "username_or_email": username_or_email,
+            "password": password
+        }
+
+        response = requests.post(login_url, headers=headers, data=json.dumps(payload))
+        response.raise_for_status()  # Raise an exception for bad status codes
+
+        login_data = response.json()
+
+        if 'access_token' in login_data:
+            self.headers['Authorization'] = f"{login_data['token_type']} {login_data['access_token']}"
+            return login_data
+        else:
+            raise Exception("Login failed: No access token in response")
 
     def fetch_courses(self):
         courses_url = f'{BASE_URL}/api/courses'
