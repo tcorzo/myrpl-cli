@@ -2,10 +2,11 @@ import argparse
 import os
 from dotenv import load_dotenv
 from myrpl_cli.myrpl_api import MYRPL_API
+from tqdm import tqdm
 
 load_dotenv()
 
-def save_activity(api, course, activity):
+def save_activity(api, course, activity, pbar):
     course_id = course['id']
     course_name = course['name']
     activity_id = activity['id']
@@ -40,17 +41,25 @@ def save_activity(api, course, activity):
     with open(f'{base_path}/unit_test.py', 'w') as unit_test_file:
         unit_test_file.write(unit_tests)
 
+    pbar.update(1)
+    pbar.set_description(f"Saved: {activity_name}")
+
 def fetch_course(api, course_id):
+    print(f"Fetching course information for ID {course_id}...")
     courses = api.fetch_courses()
     course = next((course for course in courses if course['id'] == course_id), None)
     if course is None:
         raise ValueError(f"Course with ID {course_id} not found.")
 
+    print(f"Fetching activities for course: {course['name']}...")
     activities = api.fetch_activities(course_id)
-    for activity in activities:
-        save_activity(api, course, activity)
 
-    print(f"All activities for course ID {course_id} have been saved.")
+    print(f"Found {len(activities)} activities. Starting download...")
+    with tqdm(total=len(activities), unit="activity") as pbar:
+        for activity in activities:
+            save_activity(api, course, activity, pbar)
+
+    print(f"All activities for course ID {course_id} have been successfully saved.")
 
 def main():
     parser = argparse.ArgumentParser(description="CLI tool for MyRPL course activities")
@@ -68,6 +77,7 @@ def main():
         if not bearer_token:
             parser.error("Bearer token must be provided either via --token argument or MYRPL_BEARER_TOKEN environment variable")
 
+        print("Initializing API connection...")
         api = MYRPL_API(bearer_token)
         fetch_course(api, args.course_id)
     elif args.command is None:
