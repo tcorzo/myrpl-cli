@@ -1,6 +1,20 @@
 # MyRPL CLI
 
-MyRPL CLI is a command-line interface tool for fetching and saving course activities from myrpl.ar.
+MyRPL CLI is a command-line interface tool for fetching and saving course activities from `myrpl.ar`.
+
+## What does it do?
+
+-   🪨 Tired of copying and pasting your code between your IDE and RPL like a caveman?
+
+    > Well I've got the answer for you! Fetch your activities with `myrpl fetch`, solve them and upload them **once** with `myrpl submit` when you're done
+
+-   ⌛ Exhausted of waiting seconds for running tests that should take **milli**seconds?
+
+    > Well I've got the answer for you! Run your tests **locally** with `myrpl test`
+
+-   💦 Got a thing for slick CLI tools?
+
+    > While `myrpl` can't help you with your fantasies, it can certainly make your workflow smoother and more enjoyable. 😏
 
 ## Installation 🛠️
 
