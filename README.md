@@ -15,11 +15,19 @@ git clone https://github.com/tcorzo/myrpl-cli.git
 cd myrpl-cli
 ```
 
-3. Install the dependencies and the myrpl-cli itself:
+3. Build the package:
 
 ```bash
-poetry install
+poetry build
 ```
+
+4. Install the package globally:
+
+```bash
+pip install dist/myrpl_cli-0.1.0-py3-none-any.whl
+```
+
+Now you can use the `myrpl` command!
 
 ## Usage
 
@@ -39,31 +47,31 @@ Option 2: Provide the token as a command-line argument (see examples below)
 To fetch activities for a specific course:
 
 ```bash
-myrpl fetch <course_id> [--token YOUR_BEARER_TOKEN]
+poetry run myrpl fetch <course_id> [--token YOUR_BEARER_TOKEN]
 ```
 
 Example:
 
 ```bash
-myrpl fetch 57
+poetry run myrpl fetch 57
 ```
 Or with explicit token:
 
 ```bash
-myrpl fetch 57 --token your_bearer_token_here
+poetry run myrpl fetch 57 --token your_bearer_token_here
 ```
 
 ### Getting help
 
 For general help:
 ```bash
-myrpl --help
+poetry run myrpl --help
 ```
 
 For help with the a specific command:
 
 ```bash
-myrpl {command} --help
+poetry run myrpl {command} --help
 ```
 
 ## Project Structure
