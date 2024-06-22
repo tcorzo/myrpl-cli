@@ -1,21 +1,18 @@
-# myrpl.py
-
 import os
 from tqdm import tqdm
-
+import logging
 import getpass
 
-from myrpl_cli.api import API
-from myrpl_cli.credential_manager import CredentialManager
+logger = logging.getLogger(__name__)
 
 class MyRPL:
 
-    def __init__(self):
-        self.api = API()
-        self.cred_mgr = CredentialManager()
+    def __init__(self, api, cred_mgr):
+        self.api = api
+        self.cred_mgr = cred_mgr
         self.api_token = None
 
-    def login(self) -> tuple[str, str]:
+    def login(self):
         username = input("Enter your username or email: ")
         password = getpass.getpass("Enter your password: ")
 
@@ -23,38 +20,38 @@ class MyRPL:
             login_result = self.api.login(username, password)
             self.cred_mgr.store_credentials(username, password)
             self.cred_mgr.store_token(login_result['access_token'])
-            print("Login successful. Credentials stored securely.")
+            logger.info("Login successful. Credentials stored securely.")
         except Exception as e:
-            print(f"Login failed: {e}")
+            logger.error(f"Login failed: {e}")
 
         return username, password
 
-    def fetch_course(self, api, course_id, token, force=False):
+    def fetch_course(self, course_id, token=None, force=False):
         if token:
             self.api_token = token
 
-        print(f"Fetching course information for ID {course_id}...")
-        courses = api.fetch_courses()
+        logger.info(f"Fetching course information for ID {course_id}...")
+        courses = self.api.fetch_courses()
         course = next((course for course in courses if course['id'] == course_id), None)
         if course is None:
             raise ValueError(f"Course with ID {course_id} not found.")
 
-        print(f"Fetching activities for course: {course['name']}...")
-        activities = api.fetch_activities(course_id)
+        logger.info(f"Fetching activities for course: {course['name']}...")
+        activities = self.api.fetch_activities(course_id)
 
-        print(f"Found {len(activities)} activities. Starting {'download' if force else 'update'}...")
+        logger.info(f"Found {len(activities)} activities. Starting {'download' if force else 'update'}...")
         with tqdm(total=len(activities), unit="activity") as pbar:
             for activity in activities:
-                self.save_activity(api, course, activity, pbar, force)
+                self.save_activity(course, activity, pbar, force)
 
-        print(f"All activities for course {course['name']} (ID={course_id}) have been successfully {'saved' if force else 'updated'}.")
+        logger.info(f"All activities for course {course['name']} (ID={course_id}) have been successfully {'saved' if force else 'updated'}.")
 
-    def save_activity(self, api, course, activity, pbar, force=False):
+    def save_activity(self, course, activity, pbar, force=False):
         course_id = course['id']
         course_name = course['name']
         activity_id = activity['id']
 
-        activity_info = api.fetch_activity_info(course_id, activity_id)
+        activity_info = self.api.fetch_activity_info(course_id, activity_id)
 
         category_name = activity_info['category_name']
         activity_name = activity_info['name']
@@ -64,7 +61,7 @@ class MyRPL:
         unit_tests = activity_info['activity_unit_tests']
         file_id = activity_info['file_id']
 
-        initial_code = api.fetch_initial_code(file_id)
+        initial_code = self.api.fetch_initial_code(file_id)
         main_py_content = initial_code.get('main.py', '')
 
         base_path = f'./courses/{course_name}/{category_name}/{activity_name}'
@@ -96,22 +93,21 @@ class MyRPL:
         # try request
 
     def get_api_token(self):
-        api_token = self.api_token
-        if not api_token is None:
-            return api_token
+        if self.api_token:
+            return self.api_token
 
-        api_token = self.cred_mgr.get_stored_token()
-        if not api_token is None:
-            return api_token
+        self.api_token = self.cred_mgr.get_stored_token()
+        if self.api_token:
+            return self.api_token
 
         username, password = self.cred_mgr.get_stored_credentials()
         if not username or not password:
             username, password = self.login()
 
         login_result = self.api.login(username, password)
-        api_token = login_result['access_token']
-        if not api_token is None:
-            return api_token
+        self.api_token = login_result['access_token']
+        if self.api_token:
+            return self.api_token
 
         raise Exception('All authentication methods failed')
 
