@@ -6,7 +6,7 @@ import toml
 from tqdm import tqdm
 
 from myrpl_cli.errors import AuthError
-from myrpl_cli.models import Course, Activity
+from myrpl_cli.models import Activity
 from myrpl_cli.api import API
 from myrpl_cli.credential_manager import CredentialManager
 
@@ -63,13 +63,17 @@ class MyRPL:
                 self.save_activity(activity, pbar, force)
 
         logger.info(
-            "All activities for course %s (ID=%i) have been successfully {'saved' if force else 'updated'}.",
+            "All activities for course %s (ID=%i) have been successfully %s.",
             course.name,
-            course_id
+            course.id,
+            'saved' if force else 'updated'
         )
 
     def save_activity(self, activity: Activity, pbar, force=False):
-        """Saves all relevant files for a given activity"""
+        """
+        Saves all relevant files for a given activity
+        """
+        
         course = activity.course
 
         activity = self.api.fetch_activity_info(activity)
@@ -106,7 +110,7 @@ class MyRPL:
                 category_file.write(category_description)
 
         files_to_save = {
-            '.myrpl': self.activity_metadata(course, activity),
+            '.myrpl': self.activity_metadata(activity),
             'description.md': description,
             **submission_files,
             'unit_test.py': unit_tests
@@ -121,24 +125,24 @@ class MyRPL:
         pbar.update(1)
         pbar.set_description(f"Saved: {activity_name}")
 
-    def activity_metadata(self, course: Course, activity_info):
-        """Returns an activity's metadata"""
+    def activity_metadata(self, activity: Activity) -> str:
+        """Returns metadata string for a given activity"""
 
         return toml.dumps({
             'myrpl': {
                 'course': {
-                    'id': course.id,
-                    'name': course.name,
+                    'id': activity.course.id,
+                    'name': activity.course.name,
                 },
                 'category': {
-                    'id': activity_info['category_id'],
-                    'name': activity_info['category_name'],
-                    'description': activity_info['category_description']
+                    'id': activity.category.id,
+                    'name': activity.category.name,
+                    'description': activity.category.description
                 },
                 'activity': {
-                    'id': activity_info['id'],
-                    'name': activity_info['name'],
-                    'description': activity_info['description']
+                    'id': activity.id,
+                    'name': activity.name,
+                    'description': activity.description
                 }
             }
         })

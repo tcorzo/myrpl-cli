@@ -179,8 +179,8 @@ class API:
         """Makes a generic API call"""
 
         response = requests.request(
-            method, url,
-            headers=self.headers,
+            method,
+            url,
             **kwargs,
             timeout=10
         )
