@@ -60,19 +60,22 @@ class API:
             'get',
             f'{BASE_URL}/api/courses/{course.id}/activities'
         )
-        activities = [Activity(**activity) for activity in activities_response]
+        activities = [Activity(course=course, **activity)
+                      for activity in activities_response]
         return activities
 
     def fetch_activity_info(self, activity: Activity) -> Activity:
         """Fetches all info on an activity"""
 
-        course = activity.course
         activity_info_response = self.auth_api_call(
             'get',
-            f'{BASE_URL}/api/courses/{course.id}/activities/{activity.id}'
+            f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}'
         )
 
-        return Activity(**activity_info_response)
+        return Activity(
+            course=activity.course,
+            **activity_info_response
+        )
 
     def fetch_initial_code(self, activity: Activity):
         """Fetches the initial code snippet for a given activity"""
@@ -89,7 +92,7 @@ class API:
             'get',
             f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions'
         )
-        submissions = [Submission(**submission)
+        submissions = [Submission(activity=activity, **submission)
                        for submission in submissions_response]
         return submissions
 
@@ -100,7 +103,11 @@ class API:
             'get',
             f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/finalSubmission'
         )
-        return Submission(**final_submission_response)
+        return Submission(
+            activity=activity,
+            **final_submission_response,
+            is_final_solution=True
+        )
 
     def fetch_submission_result(self, submission: Submission) -> SubmissionResult:
         """Fetches the result of a given submission"""
@@ -109,7 +116,7 @@ class API:
             'get',
             f'{BASE_URL}/api/submissions/{submission.id}/result'
         )
-        return SubmissionResult(**submission_result_response)
+        return SubmissionResult(submission=submission, activity=submission.activity, **submission_result_response)
 
     def submit(self, activity: Activity, submission_file: str, description: str = ""):
         """Submits a submission for an activity"""
@@ -139,13 +146,31 @@ class API:
     def auth_api_call(self, method: str, url: str, **kwargs):
         """Makes a generic authed API call"""
 
+        if self.headers.get('Authorization', None) is None:
+            self.headers['Authorization'] = f"Bearer {self.credential_manager.get_stored_token()}"
+
+        headers = {
+            **self.headers,
+            **(kwargs.get('headers', {}))
+        }
+
         try:
-            response = self.make_request(method, url, **kwargs)
+            response = self.make_request(
+                method,
+                url,
+                **kwargs,
+                headers=headers
+            )
             return response.json()
         except requests.HTTPError as e:
             if e.response.status_code == 401:
                 self.renew_token()
-                response = self.make_request(method, url, **kwargs)
+                response = self.make_request(
+                    method,
+                    url,
+                    **kwargs,
+                    headers=headers
+                )
                 return response.json()
 
             raise e
@@ -172,3 +197,4 @@ class API:
 
         login_result = self.login(username, password)
         self.credential_manager.store_token(login_result['access_token'])
+        self.headers['Authorization'] = f"Bearer {login_result['access_token']}"
