@@ -1,6 +1,10 @@
-from typing import List, Optional
+from typing import List, Optional, Literal
 
-from pydantic import BaseModel, computed_field
+from pydantic import (
+    BaseModel,
+    computed_field,
+    field_validator
+)
 
 
 class Course(BaseModel):
@@ -42,6 +46,15 @@ class Activity(BaseModel):
     language: str
     activity_unit_tests: Optional[str] = None
     file_id: int
+    submission_status: Optional[Literal["SUCCESS", "FAILURE"]] = None
+
+    @field_validator('submission_status', mode='before')
+    @classmethod
+    def empty_str_to_none(cls, v: str) -> Optional[str]:
+        """Coerses empty string to None"""
+        if v == "":
+            return None
+        return v
 
 
 class UnitTestResult(BaseModel):
@@ -56,6 +69,14 @@ class UnitTestResult(BaseModel):
 class Submission(BaseModel):
     """Submission model"""
 
+    @field_validator('submission_status', mode='before')
+    @classmethod
+    def empty_str_to_none(cls, v: str) -> Optional[str]:
+        """Coerses empty string to None"""
+        if v == "":
+            return None
+        return v
+
     id: int
     activity: Activity
     submission_file_name: str
@@ -67,7 +88,7 @@ class Submission(BaseModel):
     activity_starting_files_id: int
     activity_language: str
     activity_unit_tests: Optional[str] = None
-    submission_status: Optional[str] = None
+    submission_status: Optional[Literal["SUCCESS", "FAILURE"]] = None
     is_final_solution: Optional[bool] = None
     exit_message: Optional[str] = None
     stderr: Optional[str] = None

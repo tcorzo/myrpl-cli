@@ -46,7 +46,10 @@ class MyRPL:
         logger.info("Fetching course information for ID %i...", course_id)
         courses = self.api.fetch_courses()
         course = next(
-            (course for course in courses if course.id == course_id), None)
+            (course
+             for course in courses if course.id == course_id),
+            None
+        )
         if course is None:
             raise ValueError(f"Course with ID {course_id} not found.")
 
@@ -84,17 +87,12 @@ class MyRPL:
             return
 
         activity = self.api.fetch_activity_info(activity)
-        initial_code = self.api.fetch_initial_code(activity)
 
-        #   Initial code / last submission
-        # language = activity_info.language
-        submission_filenames = [
-            file
-            for file in initial_code if file.endswith('.py')
-        ]
-        submission_files = {}
-        for filename in submission_filenames:
-            submission_files[filename] = initial_code.get(filename, '')
+        code_files = self.get_code_files(activity)
+        code_files = {
+            k: v for k,
+            v in code_files.items() if k.endswith('.py')
+        }
 
         os.makedirs(base_path, exist_ok=True)
 
@@ -105,7 +103,7 @@ class MyRPL:
         files_to_save = {
             '.myrpl': self.activity_metadata(activity),
             'description.md': activity.description,
-            **submission_files,
+            **code_files,
             'unit_test.py': activity.activity_unit_tests
         }
 
@@ -116,6 +114,21 @@ class MyRPL:
 
         pbar.update(1)
         pbar.set_description(f"Saved: {activity.name}")
+
+    def get_code_files(self, activity):
+        """
+        Gets the latest submission or the initial code snippet files
+        """
+        if activity.submission_status is not None:
+            submissions = self.api.fetch_submissions(activity)
+            submissions.sort(key=lambda s: s.id)
+
+            last_submission = submissions[-1]
+            return self.api.fetch_files(
+                last_submission.submission_file_id
+            )
+        else:
+            return self.api.fetch_files(activity.file_id)
 
     def activity_metadata(self, activity: Activity) -> str:
         """Returns metadata string for a given activity"""

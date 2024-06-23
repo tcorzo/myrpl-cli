@@ -76,17 +76,19 @@ class API:
             f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}'
         )
 
-        return Activity(
-            course=activity.course,
+        merged_activity_attrs = {
+            **activity.model_dump(),
             **activity_info_response
-        )
+        }
 
-    def fetch_initial_code(self, activity: Activity):
+        return Activity(**merged_activity_attrs)
+
+    def fetch_files(self, file_id: int) -> dict[str, str]:
         """Fetches the initial code snippet for a given activity"""
 
         return self.auth_api_call(
             'get',
-            f'{BASE_URL}/api/getFileForStudent/{activity.file_id}'
+            f'{BASE_URL}/api/getFileForStudent/{file_id}'
         )
 
     def fetch_submissions(self, activity: Activity):

@@ -214,6 +214,7 @@ def test_fetch_activities(api, course):
         assert activities[0].language == "PYTHON3"
         assert activities[0].activity_unit_tests is None
         assert activities[0].file_id == 485090
+        assert activities[0].submission_status == "SUCCESS"
         assert isinstance(activities[1], Activity)
         assert activities[1].id == 5790
         assert activities[1].course == course
@@ -278,15 +279,26 @@ def test_fetch_activity_info(api, activity):
         assert updated_activity.file_id == 485090
 
 
-def test_fetch_initial_code(api, activity):
+def test_fetch_files(api):
     """It should request and return the initial code for an activity"""
 
     with patch.object(api, 'auth_api_call') as mock_call:
-        mock_call.return_value = 'def initial_code():\n    pass'
+        mock_call.return_value = {
+            'file_1.py': 'def initial_code():\n    pass',
+            'file_2.py': 'def da_function():\n    pass'
+        }
 
-        initial_code = api.fetch_initial_code(activity)
+        files = api.fetch_files(3)
 
-        assert initial_code == 'def initial_code():\n    pass'
+        mock_call.assert_called_once()
+        call_args = mock_call.call_args
+        assert call_args[0][0] == 'get'
+        assert call_args[0][1].endswith('/api/getFileForStudent/3')
+
+        assert files == {
+            'file_1.py': 'def initial_code():\n    pass',
+            'file_2.py': 'def da_function():\n    pass'
+        }
 
 
 def test_fetch_submissions(api, activity):
@@ -466,7 +478,7 @@ def test_fetch_submission_result(api, activity):
         activity_starting_files_id=485090,
         activity_language="activity_language",
         activity_unit_tests="activity_unit_tests",
-        submission_status="submission_status",
+        submission_status="FAILURE",
         is_final_solution=False,
         exit_message="exit_message",
         stderr="stderr",
