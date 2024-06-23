@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 
 class Course(BaseModel):
@@ -21,23 +21,27 @@ class Category(BaseModel):
 class Activity(BaseModel):
     """Activity model"""
     course: Course
-    category: Category
+
+    category_id: int
+    category_name: str
+    category_description: str
+
+    @computed_field
+    def category(self) -> Category:
+        return Category(
+            course=self.course,
+            id=self.category_id,
+            name=self.category_name,
+            description=self.category_description,
+        )
 
     id: int
     name: str
-    category_name: str
-    name: str
-    category_description: str
     description: str
+
     language: str
-    activity_unit_tests: str
+    activity_unit_tests: Optional[str] = None
     file_id: int
-
-
-class SubmissionResult(BaseModel):
-    """SubmissionResult model"""
-
-    # Define fields as per your API response structure
 
 
 class UnitTestResult(BaseModel):
@@ -46,14 +50,14 @@ class UnitTestResult(BaseModel):
     id: int
     test_name: str
     passed: bool
-    error_messages: Optional[str]
+    error_messages: Optional[str] = None
 
 
 class Submission(BaseModel):
     """Submission model"""
 
     id: int
-    activity_id: int
+    activity: Activity
     submission_file_name: str
     submission_file_type: str
     submission_file_id: int
@@ -62,15 +66,21 @@ class Submission(BaseModel):
     activity_starting_files_type: str
     activity_starting_files_id: int
     activity_language: str
-    activity_unit_tests: str
-    submission_status: str
-    is_final_solution: bool
-    exit_message: str
-    stderr: str
-    stdout: str
-    io_test_run_results: List[dict]  # Define structure based on actual data
-    unit_test_run_results: List[UnitTestResult]
-    submission_date: str
+    activity_unit_tests: Optional[str] = None
+    submission_status: Optional[str] = None
+    is_final_solution: Optional[bool] = None
+    exit_message: Optional[str] = None
+    stderr: Optional[str] = None
+    stdout: Optional[str] = None
+    io_test_run_results: List[dict] = []
+    unit_test_run_results: List[UnitTestResult] = []
+    submission_date: Optional[str] = None
+
+
+class SubmissionResult(Submission):
+    """SubmissionResult model"""
+
+    submission: Submission
 
 
 class CourseMetadata(BaseModel):

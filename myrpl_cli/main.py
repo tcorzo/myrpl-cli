@@ -38,7 +38,7 @@ def main():
         help="Fetch and save activities for a given course ID"
     )
     fetch_parser.add_argument(
-        "course_id", type=int, required=True,
+        "course_id", type=int,
         help="ID of the course to fetch activities from"
     )
     fetch_parser.add_argument(
