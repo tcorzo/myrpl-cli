@@ -38,7 +38,6 @@ class SubmissionResult(BaseModel):
     """SubmissionResult model"""
 
     # Define fields as per your API response structure
-    pass
 
 
 class UnitTestResult(BaseModel):

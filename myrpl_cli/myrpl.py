@@ -22,7 +22,7 @@ class MyRPL:
         self.api_token = None
 
     def login(self):
-        """Asks user for credentials, stores them and saves token"""
+        """Asks user for credentials, stores them and saves the token"""
 
         username = input("Enter your username or email: ")
         password = getpass.getpass("Enter your password: ")
@@ -89,7 +89,6 @@ class MyRPL:
         unit_tests = activity.activity_unit_tests
 
         #   Initial code / last submission
-        #   TODO provide per language support
         # language = activity_info.language
         initial_code = self.api.fetch_initial_code(activity)
         submission_filenames = [

@@ -28,8 +28,10 @@ class API:
         """Obtains a bearer token given email & password"""
 
         login_url = f'{BASE_URL}/api/auth/login'
-        payload = {"username_or_email": username_or_email,
-                   "password": password}
+        payload = {
+            "username_or_email": username_or_email,
+            "password": password
+        }
         response = requests.post(
             login_url,
             headers=self.headers,
@@ -47,7 +49,7 @@ class API:
         """Fetches all courses"""
 
         courses_response = self.auth_api_call('get', f'{BASE_URL}/api/courses')
-        courses = [Course(id=course['id'], name=course['name'])
+        courses = [Course(**course)
                    for course in courses_response]
         return courses
 
@@ -55,7 +57,9 @@ class API:
         """Fetches all activities in a course"""
 
         activities_response = self.auth_api_call(
-            'get', f'{BASE_URL}/api/courses/{course.id}/activities')
+            'get',
+            f'{BASE_URL}/api/courses/{course.id}/activities'
+        )
         activities = [Activity(**activity) for activity in activities_response]
         return activities
 
@@ -64,7 +68,9 @@ class API:
 
         course = activity.course
         activity_info_response = self.auth_api_call(
-            'get', f'{BASE_URL}/api/courses/{course.id}/activities/{activity.id}')
+            'get',
+            f'{BASE_URL}/api/courses/{course.id}/activities/{activity.id}'
+        )
 
         return Activity(**activity_info_response)
 
@@ -100,7 +106,9 @@ class API:
         """Fetches the result of a given submission"""
 
         submission_result_response = self.auth_api_call(
-            'get', f'{BASE_URL}/api/submissions/{submission.id}/result')
+            'get',
+            f'{BASE_URL}/api/submissions/{submission.id}/result'
+        )
         return SubmissionResult(**submission_result_response)
 
     def submit(self, activity: Activity, submission_file: str, description: str = ""):
@@ -112,7 +120,11 @@ class API:
 
         with open(submission_file, 'rb') as f:
             form = MultipartEncoder(
-                fields={'file': (submission_file, f, mime_type), 'description': description})
+                fields={
+                    'file': (submission_file, f, mime_type),
+                    'description': description
+                }
+            )
 
         headers = self.headers.copy()
         headers['Content-Type'] = form.content_type
