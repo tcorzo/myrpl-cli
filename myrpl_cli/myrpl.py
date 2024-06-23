@@ -73,57 +73,49 @@ class MyRPL:
         """
         Saves all relevant files for a given activity
         """
-        
+
         course = activity.course
+        category = activity.category
+        base_path = f'./courses/{course.name}/{category.name}/{activity.name}'
+
+        if os.path.exists(f'{base_path}/') and not force:
+            pbar.update(1)
+            pbar.set_description(f"Skipped: {activity.name}, already exists")
+            return
 
         activity = self.api.fetch_activity_info(activity)
-
-        # Course
-        course_name = course.name
-
-        # Category
-        category_name = activity.category_name
-        category_description = activity.category_description
-
-        # Activity
-        activity_name = activity.name
-        description = activity.description
-
-        #   Tests
-        unit_tests = activity.activity_unit_tests
+        initial_code = self.api.fetch_initial_code(activity)
 
         #   Initial code / last submission
         # language = activity_info.language
-        initial_code = self.api.fetch_initial_code(activity)
         submission_filenames = [
-            key for key in initial_code if key.endswith('.py')]
+            file
+            for file in initial_code if file.endswith('.py')
+        ]
         submission_files = {}
         for filename in submission_filenames:
             submission_files[filename] = initial_code.get(filename, '')
 
-        base_path = f'./courses/{course_name}/{category_name}/{activity_name}'
         os.makedirs(base_path, exist_ok=True)
 
-        category_description_path = f'./courses/{course_name}/{category_name}/description.txt'
-        if force or not os.path.exists(category_description_path):
-            with open(category_description_path, 'w', encoding='utf8') as category_file:
-                category_file.write(category_description)
+        category_description_path = f'./courses/{course.name}/{category.name}/description.txt'
+        with open(category_description_path, 'w', encoding='utf8') as category_file:
+            category_file.write(category.description)
 
         files_to_save = {
             '.myrpl': self.activity_metadata(activity),
-            'description.md': description,
+            'description.md': activity.description,
             **submission_files,
-            'unit_test.py': unit_tests
+            'unit_test.py': activity.activity_unit_tests
         }
 
         for filename, content in files_to_save.items():
             file_path = os.path.join(base_path, filename)
-            if force or not os.path.exists(file_path):
-                with open(file_path, 'w', encoding='utf8') as file:
-                    file.write(content)
+            with open(file_path, 'w', encoding='utf8') as file:
+                file.write(content)
 
         pbar.update(1)
-        pbar.set_description(f"Saved: {activity_name}")
+        pbar.set_description(f"Saved: {activity.name}")
 
     def activity_metadata(self, activity: Activity) -> str:
         """Returns metadata string for a given activity"""

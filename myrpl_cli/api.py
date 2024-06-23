@@ -49,8 +49,10 @@ class API:
         """Fetches all courses"""
 
         courses_response = self.auth_api_call('get', f'{BASE_URL}/api/courses')
-        courses = [Course(**course)
-                   for course in courses_response]
+        courses = [
+            Course(**course)
+            for course in courses_response
+        ]
         return courses
 
     def fetch_activities(self, course: Course) -> List[Activity]:
@@ -60,8 +62,10 @@ class API:
             'get',
             f'{BASE_URL}/api/courses/{course.id}/activities'
         )
-        activities = [Activity(course=course, **activity)
-                      for activity in activities_response]
+        activities = [
+            Activity(course=course, **activity)
+            for activity in activities_response
+        ]
         return activities
 
     def fetch_activity_info(self, activity: Activity) -> Activity:
@@ -92,8 +96,10 @@ class API:
             'get',
             f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions'
         )
-        submissions = [Submission(activity=activity, **submission)
-                       for submission in submissions_response]
+        submissions = [
+            Submission(activity=activity, **submission)
+            for submission in submissions_response
+        ]
         return submissions
 
     def fetch_final_submission(self, activity: Activity):
@@ -116,7 +122,11 @@ class API:
             'get',
             f'{BASE_URL}/api/submissions/{submission.id}/result'
         )
-        return SubmissionResult(submission=submission, activity=submission.activity, **submission_result_response)
+        return SubmissionResult(
+            submission=submission,
+            activity=submission.activity,
+            **submission_result_response
+        )
 
     def submit(self, activity: Activity, submission_file: str, description: str = ""):
         """Submits a submission for an activity"""
@@ -143,7 +153,7 @@ class API:
             headers=headers
         )
 
-    def auth_api_call(self, method: str, url: str, **kwargs):
+    def auth_api_call(self, method: str, url: str, **kwargs) -> dict:
         """Makes a generic authed API call"""
 
         if self.headers.get('Authorization', None) is None:
@@ -161,7 +171,6 @@ class API:
                 **kwargs,
                 headers=headers
             )
-            return response.json()
         except requests.HTTPError as e:
             if e.response.status_code == 401:
                 self.renew_token()
@@ -171,9 +180,10 @@ class API:
                     **kwargs,
                     headers=headers
                 )
-                return response.json()
+            else:
+                raise e
 
-            raise e
+        return response.json()
 
     def make_request(self, method: str, url: str, **kwargs) -> requests.Response:
         """Makes a generic API call"""
