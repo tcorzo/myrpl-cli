@@ -1,4 +1,4 @@
-# MyRPL CLI
+# myrpl-cli
 
 <p align="center">
     <a href="https://github.com/tcorzo/myrpl-cli/actions/workflows/python-ci.yml" alt="Build Status">
@@ -9,7 +9,7 @@
     </a>
 </p>
 
-MyRPL CLI is a command-line interface tool for fetching and saving course activities from `myrpl.ar`.
+myrpl-cli is a command-line interface tool for fetching and saving course activities from [myrpl.ar](https://myrpl.ar/).
 
 ## What does it do?
 
@@ -54,7 +54,7 @@ Now you can use the myrpl command! 🎉
 
 ## Usage 📚
 
-To use MyRPL CLI, you need a bearer token for authentication. You can provide this token either as an environment variable (even within a .env file) or as a command-line argument.
+To use myrpl-cli, you need a bearer token for authentication. You can provide this token either as an environment variable (even within a .env file) or as a command-line argument.
 
 ### Logging In 🔑
 
@@ -167,6 +167,8 @@ Use [act](https://github.com/nektos/act) for running the github workflow locally
 
 I chose [flake8](https://pypi.org/project/flake8/) for linting
 
+> PD: I use the [Pylint](https://marketplace.visualstudio.com/items?itemName=ms-python.pylint) and [autopep8](https://marketplace.visualstudio.com/items?itemName=ms-python.autopep8) extensions on VS Code, but you do you
+
 ## Contributing 🤝
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -174,6 +176,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License 📜
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Where does the name come from?
+It's actually 'My RPL' backwards. No, wait...
 
 ## Authors 👥
 
