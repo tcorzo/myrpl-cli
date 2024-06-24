@@ -39,6 +39,7 @@ class Course(BaseModel):
     id: int
     name: str
 
+    @computed_field
     def metadata(self) -> MyRPLMetadata:
         """Returns metadata"""
 
@@ -58,6 +59,7 @@ class Category(BaseModel):
     name: str
     description: str
 
+    @computed_field
     def metadata(self) -> MyRPLMetadata:
         """Returns metadata"""
 
@@ -107,6 +109,7 @@ class Activity(BaseModel):
             return None
         return v
 
+    @computed_field
     def metadata(self) -> MyRPLMetadata:
         """Returns metadata"""
 

@@ -134,12 +134,12 @@ class MyRPL:
         course_metadata_path = os.path.join(course_path, '.myrpl')
         if not os.path.exists(f'{course_metadata_path}/'):
             with open(course_metadata_path, 'w', encoding='utf8') as file:
-                file.write(toml.dumps(course.metadata().model_dump()))
+                file.write(toml.dumps(course.metadata.model_dump()))
 
         category_metadata_path = os.path.join(category_path, '.myrpl')
         if not os.path.exists(f'{category_metadata_path}/'):
             with open(category_metadata_path, 'w', encoding='utf8') as file:
-                file.write(toml.dumps(category.metadata().model_dump()))
+                file.write(toml.dumps(category.metadata.model_dump()))
 
         category_description_path = f'./courses/{course.name}/{category.name}/description.txt'
         with open(category_description_path, 'w', encoding='utf8') as category_file:
@@ -152,7 +152,7 @@ class MyRPL:
         }
 
         files_to_save = {
-            '.myrpl': toml.dumps(activity.metadata().model_dump()),
+            '.myrpl': toml.dumps(activity.metadata.model_dump()),
             'description.md': activity.description,
             **code_files,
             'unit_test.py': activity.activity_unit_tests
