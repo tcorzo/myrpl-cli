@@ -76,7 +76,7 @@ First, `cd` into the directory where you want your courses and activities stored
 To fetch activities for a specific course:
 
 ```bash
-poetry run myrpl fetch <course_id> [--token YOUR_BEARER_TOKEN]
+myrpl fetch <course_id>
 ```
 
 This will create a file structure in the current working directory like follows:
@@ -107,13 +107,13 @@ This will create a file structure in the current working directory like follows:
 For general help:
 
 ```bash
-poetry run myrpl --help
+myrpl --help
 ```
 
 For help with the a specific command:
 
 ```bash
-poetry run myrpl {command} --help
+myrpl {command} --help
 ```
 
 ## Project Structure 🏗️
@@ -134,7 +134,7 @@ myrpl-cli/
 
 To set up the development environment:
 
-1. Install dependencies including development dependencies:
+1. Install all dependencies
 
 ```bash
 poetry install
@@ -147,6 +147,16 @@ poetry shell
 ```
 
 3. Off you go! 🚀
+
+### Tests 🧪
+
+Use `pytest` to run the project tests
+
+Use [act](https://github.com/nektos/act) for running the github workflow locally
+
+### Linting 📝✅
+
+I chose [flake8](https://pypi.org/project/flake8/) for linting
 
 ## Contributing 🤝
 

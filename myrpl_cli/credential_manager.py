@@ -2,6 +2,7 @@ from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 SERVICE_NAME = 'myrpl_cli'
 
+
 class CredentialManager:
 
     def __init__(self):
