@@ -1,13 +1,12 @@
 import logging
 import argparse
 from dotenv import load_dotenv
-
+from myrpl_cli.errors import MissingCredentialsError, NotMyRPLDirectoryError
 from myrpl_cli.myrpl import MyRPL
 from myrpl_cli.api import API
 from myrpl_cli.credential_manager import CredentialManager
 
 load_dotenv()
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -17,7 +16,17 @@ def login_command(myrpl: MyRPL):
 
 
 def fetch_command(myrpl: MyRPL, args):
-    myrpl.fetch_course(args.course_id, args.token, args.force)
+    try:
+        myrpl.fetch_course(args.course_id, args.token, args.force)
+    except MissingCredentialsError:
+        logger.error("You haven't logged in yet. Do so with `myrpl login`")
+
+
+def test_command(myrpl: MyRPL, args):
+    try:
+        myrpl.test(args)
+    except NotMyRPLDirectoryError:
+        logger.error("not a myrpl directory: .myrpl")
 
 
 def main():
@@ -50,16 +59,25 @@ def main():
         help="Force overwrite of existing files"
     )
 
-    args = parser.parse_args()
+    # Test command
+    subparsers.add_parser(
+        "test",
+        help="Run the current course/category/activity tests"
+    )
+
+    known_args, unknown_args = parser.parse_known_args()
 
     cred_mgr = CredentialManager()
     api = API(cred_mgr)
     myrpl = MyRPL(api, cred_mgr)
 
-    if args.command == "login":
+    if known_args.command == "login":
         login_command(myrpl)
-    elif args.command == "fetch":
-        fetch_command(myrpl, args)
+    elif known_args.command == "fetch":
+        fetch_command(myrpl, known_args)
+    elif known_args.command == "test":
+        # Pass both known and unknown args to test_command
+        test_command(myrpl, unknown_args)
     else:
         parser.print_help()
 

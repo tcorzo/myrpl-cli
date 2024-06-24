@@ -1,6 +1,14 @@
+class MyRPLError(BaseException):
+    """Generic error"""
+
+
+class NotMyRPLDirectoryError(MyRPLError):
+    """Not in a myrpl directory error"""
+
+
 class AuthError(BaseException):
-    pass
+    """Generic authentication error"""
 
 
 class MissingCredentialsError(AuthError):
-    pass
+    """Missing credentials error"""

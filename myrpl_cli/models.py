@@ -7,10 +7,47 @@ from pydantic import (
 )
 
 
+class CourseMetadata(BaseModel):
+    """CourseMetadata model"""
+
+    id: int
+    name: str
+
+
+class CategoryMetadata(BaseModel):
+    """CategoryMetadata model"""
+    id: int
+    name: str
+
+
+class ActivityMetadata(BaseModel):
+    """ActivityMetadata model"""
+
+    id: int
+    name: str
+    description: str
+
+
+class MyRPLMetadata(BaseModel):
+    course: CourseMetadata
+    category: Optional[CategoryMetadata] = None
+    activity: Optional[ActivityMetadata] = None
+
+
 class Course(BaseModel):
     """Course model"""
     id: int
     name: str
+
+    def metadata(self) -> MyRPLMetadata:
+        """Returns metadata"""
+
+        return MyRPLMetadata(
+            course=CourseMetadata(
+                id=self.id,
+                name=self.name
+            )
+        )
 
 
 class Category(BaseModel):
@@ -20,6 +57,20 @@ class Category(BaseModel):
     id: int
     name: str
     description: str
+
+    def metadata(self) -> MyRPLMetadata:
+        """Returns metadata"""
+
+        return MyRPLMetadata(
+            course=CourseMetadata(
+                id=self.course.id,
+                name=self.course.name
+            ),
+            category=CategoryMetadata(
+                id=self.id,
+                name=self.name
+            )
+        )
 
 
 class Activity(BaseModel):
@@ -55,6 +106,25 @@ class Activity(BaseModel):
         if v == "":
             return None
         return v
+
+    def metadata(self) -> MyRPLMetadata:
+        """Returns metadata"""
+
+        return MyRPLMetadata(
+            course=CourseMetadata(
+                id=self.course.id,
+                name=self.course.name
+            ),
+            category=CategoryMetadata(
+                id=self.category.id,
+                name=self.category.name
+            ),
+            activity=ActivityMetadata(
+                id=self.id,
+                name=self.name,
+                description=self.description
+            )
+        )
 
 
 class UnitTestResult(BaseModel):
@@ -102,28 +172,3 @@ class SubmissionResult(Submission):
     """SubmissionResult model"""
 
     submission: Submission
-
-
-class CourseMetadata(BaseModel):
-    """CourseMetadata model"""
-
-    id: int
-    name: str
-
-
-class CategoryMetadata(BaseModel):
-    """CategoryMetadata model"""
-
-    course: CourseMetadata
-    id: int
-    name: str
-
-
-class ActivityMetadata(BaseModel):
-    """ActivityMetadata model"""
-
-    course: CourseMetadata
-    category: CategoryMetadata
-    id: int
-    name: str
-    description: str

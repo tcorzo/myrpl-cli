@@ -1,12 +1,14 @@
 import os
 import logging
 import getpass
+from typing import Optional
 
+import pytest
 import toml
 from tqdm import tqdm
 
-from myrpl_cli.errors import AuthError
-from myrpl_cli.models import Activity
+from myrpl_cli.errors import AuthError, NotMyRPLDirectoryError
+from myrpl_cli.models import Activity, MyRPLMetadata
 from myrpl_cli.api import API
 from myrpl_cli.credential_manager import CredentialManager
 
@@ -72,6 +74,44 @@ class MyRPL:
             'saved' if force else 'updated'
         )
 
+    def test(self, pytest_args):
+        """
+        Run tests for current directory (course/category/activity)
+        """
+
+        meta = self.open_metadata()
+        if meta is None:
+            logger.error("can't run tests outside a myrpl directory")
+            return
+
+        logger.info("Running tests for:")
+        if meta.course is not None:
+            logger.info("Course: %s", meta.course.name)
+        if meta.category is not None:
+            logger.info("└──Category: %s", meta.category.name)
+        if meta.activity is not None:
+            logger.info("\t└──Activity: %s", meta.activity.name)
+
+        pytest.main(pytest_args)
+
+        logger.info("Finished tests for:")
+        if meta.course is not None:
+            logger.info("Course: %s", meta.course.name)
+        if meta.category is not None:
+            logger.info("└──Category: %s", meta.category.name)
+        if meta.activity is not None:
+            logger.info("\t└──Activity: %s", meta.activity.name)
+
+    def open_metadata(self) -> Optional[MyRPLMetadata]:
+        """
+        Reads, parses and returns the current directory's metadata
+        """
+
+        if not os.path.exists('.myrpl'):
+            raise NotMyRPLDirectoryError()
+
+        return MyRPLMetadata(**toml.load('.myrpl'))
+
     def save_activity(self, activity: Activity, pbar, force=False):
         """
         Saves all relevant files for a given activity
@@ -79,14 +119,31 @@ class MyRPL:
 
         course = activity.course
         category = activity.category
-        base_path = f'./courses/{course.name}/{category.name}/{activity.name}'
+        course_path = f'./courses/{course.name}'
+        category_path = f'./courses/{course.name}/{category.name}'
+        activity_path = f'./courses/{course.name}/{category.name}/{activity.name}'
 
-        if os.path.exists(f'{base_path}/') and not force:
+        if os.path.exists(f'{activity_path}/') and not force:
             pbar.update(1)
             pbar.set_description(f"Skipped: {activity.name}, already exists")
             return
 
         activity = self.api.fetch_activity_info(activity)
+        os.makedirs(activity_path, exist_ok=True)
+
+        course_metadata_path = os.path.join(course_path, '.myrpl')
+        if not os.path.exists(f'{course_metadata_path}/'):
+            with open(course_metadata_path, 'w', encoding='utf8') as file:
+                file.write(toml.dumps(course.metadata().model_dump()))
+
+        category_metadata_path = os.path.join(category_path, '.myrpl')
+        if not os.path.exists(f'{category_metadata_path}/'):
+            with open(category_metadata_path, 'w', encoding='utf8') as file:
+                file.write(toml.dumps(category.metadata().model_dump()))
+
+        category_description_path = f'./courses/{course.name}/{category.name}/description.txt'
+        with open(category_description_path, 'w', encoding='utf8') as category_file:
+            category_file.write(category.description)
 
         code_files = self.get_code_files(activity)
         code_files = {
@@ -94,21 +151,15 @@ class MyRPL:
             v in code_files.items() if k.endswith('.py')
         }
 
-        os.makedirs(base_path, exist_ok=True)
-
-        category_description_path = f'./courses/{course.name}/{category.name}/description.txt'
-        with open(category_description_path, 'w', encoding='utf8') as category_file:
-            category_file.write(category.description)
-
         files_to_save = {
-            '.myrpl': self.activity_metadata(activity),
+            '.myrpl': toml.dumps(activity.metadata().model_dump()),
             'description.md': activity.description,
             **code_files,
             'unit_test.py': activity.activity_unit_tests
         }
 
         for filename, content in files_to_save.items():
-            file_path = os.path.join(base_path, filename)
+            file_path = os.path.join(activity_path, filename)
             with open(file_path, 'w', encoding='utf8') as file:
                 file.write(content)
 
@@ -129,25 +180,3 @@ class MyRPL:
             )
         else:
             return self.api.fetch_files(activity.file_id)
-
-    def activity_metadata(self, activity: Activity) -> str:
-        """Returns metadata string for a given activity"""
-
-        return toml.dumps({
-            'myrpl': {
-                'course': {
-                    'id': activity.course.id,
-                    'name': activity.course.name,
-                },
-                'category': {
-                    'id': activity.category.id,
-                    'name': activity.category.name,
-                    'description': activity.category.description
-                },
-                'activity': {
-                    'id': activity.id,
-                    'name': activity.name,
-                    'description': activity.description
-                }
-            }
-        })
