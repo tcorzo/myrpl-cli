@@ -99,7 +99,9 @@ class Activity(BaseModel):
     language: str
     activity_unit_tests: Optional[str] = None
     file_id: int
-    submission_status: Optional[Literal["SUCCESS", "FAILURE"]] = None
+    submission_status: Optional[Literal["PENDING", "ENQUEUED", "PROCESSING",
+                                        "BUILD_ERROR", "RUNTIME_ERROR", "FAILURE",
+                                        "SUCCESS", "TIME_OUT"]] = None
 
     @field_validator('submission_status', mode='before')
     @classmethod
@@ -161,7 +163,9 @@ class Submission(BaseModel):
     activity_starting_files_id: int
     activity_language: str
     activity_unit_tests: Optional[str] = None
-    submission_status: Optional[Literal["SUCCESS", "FAILURE"]] = None
+    submission_status: Optional[Literal["PENDING", "ENQUEUED", "PROCESSING",
+                                        "BUILD_ERROR", "RUNTIME_ERROR", "FAILURE",
+                                        "SUCCESS", "TIME_OUT"]] = None
     is_final_solution: Optional[bool] = None
     exit_message: Optional[str] = None
     stderr: Optional[str] = None
