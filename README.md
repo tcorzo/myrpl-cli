@@ -44,10 +44,10 @@ cd myrpl-cli
 poetry build
 ```
 
-4. Install the package globally:
+4. Install the package globally using [pipx](https://github.com/pypa/pipx):
 
 ```bash
-pip install dist/myrpl_cli-0.2.0-py3-none-any.whl
+pipx install dist/myrpl_cli-0.2.0-py3-none-any.whl
 ```
 
 Now you can use the myrpl command! 🎉
@@ -168,6 +168,21 @@ Use [act](https://github.com/nektos/act) for running the github workflow locally
 I chose [flake8](https://pypi.org/project/flake8/) for linting
 
 > PD: I use the [Pylint](https://marketplace.visualstudio.com/items?itemName=ms-python.pylint) and [autopep8](https://marketplace.visualstudio.com/items?itemName=ms-python.autopep8) extensions on VS Code, but you do you
+
+## Roadmap 🗺️
+- [x] Implement basic authentication functionality
+- [x] Fetch course activities
+- [x] Store credentials securely for reuse
+- [x] Fetch latest submission
+- [ ] Implement activity submission (`myrpl submit`)
+- [ ] Implement course/category/activity progress (`myrpl status`)
+- [ ] Remove annoying keyring passphrase
+- [ ] Enhance test coverage
+- [ ] VS Code extension (?)
+- [ ] Add support for additional programming languages (idk if actually necessary)
+
+Please note that this roadmap is subject to change and may be updated based on user feedback and my own time 😁
+
 
 ## Contributing 🤝
 
