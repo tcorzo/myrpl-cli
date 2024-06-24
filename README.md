@@ -1,5 +1,14 @@
 # MyRPL CLI
 
+<p align="center">
+    <a href="https://github.com/tcorzo/myrpl-cli/actions/workflows/python-ci.yml" alt="Build Status">
+        <img src="https://img.shields.io/github/actions/workflow/status/tcorzo/myrpl-cli/python-ci.yml?branch=main" />
+    </a>
+    <a href="https://github.com/tcorzo/myrpl-cli/blob/main/LICENSE" alt="License">
+        <img src="https://img.shields.io/github/license/tcorzo/myrpl-cli" />
+    </a>
+</p>
+
 MyRPL CLI is a command-line interface tool for fetching and saving course activities from `myrpl.ar`.
 
 ## What does it do?
@@ -8,7 +17,7 @@ MyRPL CLI is a command-line interface tool for fetching and saving course activi
 
     > Well I've got the answer for you! Fetch your activities with `myrpl fetch`, solve them and upload them **once** with `myrpl submit` when you're done
 
--   ⌛ Exhausted of waiting seconds for running tests that should take **milli**seconds?
+-   ⌛ Exhausted of waiting **whole** seconds for running tests that should take **milli**seconds?
 
     > Well I've got the answer for you! Run your tests **locally** with `myrpl test`
 
