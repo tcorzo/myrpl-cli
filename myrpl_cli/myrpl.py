@@ -180,3 +180,12 @@ class MyRPL:
             )
         else:
             return self.api.fetch_files(activity.file_id)
+
+    def get_hidden_files(self, activity):
+        """
+        Gets the hidden files for an activity
+        """
+
+        
+
+        return self.api.fetch_files(activity.hidden_file_id)

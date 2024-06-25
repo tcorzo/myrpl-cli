@@ -552,6 +552,21 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "pycdc"
+version = "0.0.1"
+description = "Python bindings for Decompyle++"
+optional = false
+python-versions = "<3.11,>3.7.6"
+files = []
+develop = false
+
+[package.source]
+type = "git"
+url = "https://github.com/percevalw/pycdc.git"
+reference = "pypi"
+resolved_reference = "89d57032dfbe2c77168af7e994da841b876eee6f"
+
+[[package]]
 name = "pycodestyle"
 version = "2.12.0"
 description = "Python style guide checker"
@@ -929,5 +944,5 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.10,<4.0"
-content-hash = "96b5585ccb93fc92826dcf59d15ed486b472dbfc0f0578a68c00366e04e51db4"
+python-versions = ">=3.10,<3.11"
+content-hash = "d4e47c81f13a01e999fa03999cdcd27cf064df3dbde190947ab6be344cf0e2a9"
