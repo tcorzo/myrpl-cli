@@ -155,6 +155,25 @@ class API:
             headers=headers
         )
 
+    def set_final_submission(self, submission: Submission) -> Submission:
+        """
+        Sets the submission as the final solution for an activity
+        """
+
+        final_submission_response = self.auth_api_call(
+            'put',
+            f'{BASE_URL}/api/courses/{submission.activity.course.id}\
+                /activities/{submission.activity.id}\
+                    /submissions/{submission.id}/final'
+        )
+
+        merged_submission_attrs = {
+            **submission.model_dump(),
+            **final_submission_response
+        }
+
+        return Submission(**merged_submission_attrs)
+
     def auth_api_call(self, method: str, url: str, **kwargs) -> dict:
         """Makes a generic authed API call"""
 

@@ -41,6 +41,23 @@ def mock_activity(course):
     )
 
 
+@pytest.fixture(name="submission")
+def mock_submission(activity):
+    return Submission(
+        activity=activity,
+        id=1,
+        submission_file_name='submission.py',
+        submission_file_type='text/plain',
+        submission_file_id=1,
+        is_iotested=False,
+        activity_starting_files_name='starting_files.tar.gz',
+        activity_starting_files_type='application/gzip',
+        activity_starting_files_id=1,
+        activity_language='python',
+        activity_unit_tests="def test1():\n\tassert(True)\n\treturn"
+    )
+
+
 def test_login(api):
     """It should login and return the login data"""
 
@@ -678,3 +695,51 @@ def test_auth_api_call_with_token_renewal(api):
         mock_renew_token.assert_called_once()
 
         assert result == {'data': 'success'}
+
+
+def test_set_final_submission(api, activity):
+    submission = Submission(
+        id=695375,
+        activity=activity,
+        submission_file_name='57_5845_2192',
+        submission_file_type="application/gzip",
+        submission_file_id=706421,
+        is_iotested=False,
+        activity_starting_files_name="2024-02-16_57_12 - Kilómetros de Mafia.tar.gz",
+        activity_starting_files_type="application/gzip",
+        activity_starting_files_id=562839,
+        activity_language="python_3.7",
+        activity_unit_tests="",
+        is_final_solution=False
+    )
+
+    with patch.object(api, 'auth_api_call') as mock_call:
+        mock_call.return_value = {
+            "id": 695375,
+            "submission_file_name": "57_5845_2192",
+            "submission_file_type": "application/gzip",
+            "submission_file_id": 706421,
+            "activity_starting_files_name": "2024-02-16_57_12 - Kilómetros de Mafia.tar.gz",
+            "activity_starting_files_type": "application/gzip",
+            "activity_starting_files_id": 562839,
+            "activity_language": "python_3.7",
+            "is_iotested": False,
+            "activity_unit_tests_content": "",
+            "compilation_flags": "",
+            "activity_iotests": []
+        }
+
+        final_submission = api.set_final_submission(submission)
+
+        assert isinstance(final_submission, Submission)
+        # assert final_submission.is_final_solution is True
+        assert final_submission.id == 695375
+        assert final_submission.activity == activity
+        assert final_submission.submission_file_name == '57_5845_2192'
+        assert final_submission.submission_file_type == "application/gzip"
+        assert final_submission.submission_file_id == 706421
+        assert final_submission.is_iotested is False
+        assert final_submission.activity_starting_files_name == "2024-02-16_57_12 - Kilómetros de Mafia.tar.gz"
+        assert final_submission.activity_starting_files_type == "application/gzip"
+        assert final_submission.activity_starting_files_id == 562839
+        assert final_submission.activity_language == "python_3.7"
