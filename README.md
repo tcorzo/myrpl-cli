@@ -167,7 +167,7 @@ poetry shell
 
 ### Tests 🧪
 
-Use `pytest` to run the project tests
+Use `pytest` to run the project's tests
 
 Use [act](https://github.com/nektos/act) for running the github workflow locally
 
@@ -194,7 +194,7 @@ I chose [ruff](https://github.com/astral-sh/ruff/) for linting + formatting
 
 Please note that this roadmap is subject to change and may be updated based on user feedback and my own time 😁
 
-## I don't know where to write this and I'm too exited to even care
+## How does myrpl-cli fetch hidden files and decompiles them? (incoming feature)
 
 I ran into a problem where I couldn't run a unit_test because the "grafo" library
 was missing.

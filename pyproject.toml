@@ -33,14 +33,14 @@ build-backend = "poetry.masonry.api"
 [tool.ruff]
 line-length = 120
 exclude = [
-    ".git",
-    "__pycache__",
-    ".venv",
-    "venv",
-    ".eggs",
-    "*.egg",
-    "build",
-    "dist",
+	".git",
+	"__pycache__",
+	".venv",
+	"venv",
+	".eggs",
+	"*.egg",
+	"build",
+	"dist",
 ]
 
 [tool.ruff.lint]
@@ -55,10 +55,10 @@ extend-exclude = ["tests/*"]
 
 [tool.typos.default]
 extend-ignore-re = [
-    # Line ignore with trailing "# spellchecker =disable-line"
-    "(?Rm)^.*#\\s*spellchecker =disable-line$",
-    # Line block with "# spellchecker =<on|off>"
-    "(?s)(#|//)\\s*spellchecker =off.*?\\n\\s*(#|//)\\s*spellchecker =on",
+	# Line ignore with trailing "# spellchecker =disable-line"
+	"(?Rm)^.*#\\s*spellchecker =disable-line$",
+	# Line block with "# spellchecker =<on|off>"
+	"(?s)(#|//)\\s*spellchecker =off.*?\\n\\s*(#|//)\\s*spellchecker =on",
 ]
 
 # [tool.markdownlint]
