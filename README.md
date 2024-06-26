@@ -174,6 +174,8 @@ I chose [flake8](https://pypi.org/project/flake8/) for linting
 - [x] Fetch course activities
 - [x] Store credentials securely for reuse
 - [x] Fetch latest submission
+- [ ] Implement hidden file .pyc download via submission abuse (branch: `feature/hidden_file_decompilation`)
+- [ ] Implement hidden file decompilation for python version agnostic test execution
 - [ ] Implement activity submission (`myrpl submit`)
 - [ ] Implement course/category/activity progress (`myrpl status`)
 - [ ] Remove annoying keyring passphrase
@@ -183,6 +185,66 @@ I chose [flake8](https://pypi.org/project/flake8/) for linting
 
 Please note that this roadmap is subject to change and may be updated based on user feedback and my own time 😁
 
+## I don't know where to write this and I'm too exited to even care
+
+I ran into a problem where I couldn't run a unit_test because the "grafo" library
+was missing.
+
+So, what could I do?
+
+I started trying to get the content of the grafo library, obviously
+
+I ended up with this code snippet, which I ran on [myrpl.ar](https://myrpl.ar):
+```python
+import grafo
+import base64
+
+def vertex_cover_min(_):
+
+    print("#startgrafocontent")
+    with open(grafo.__file__, 'rb') as gf:
+        content = gf.read()
+        encoded_content = base64.b64encode(content).decode('utf-8')
+        print(encoded_content)
+    print("#endgrafocontent")
+
+    return []
+```
+> In the future this can be easily automated with the submission API
+
+This ends up spitting into the submission's stdout the base64 encoded contents
+of the `grafo.pyc` file.
+
+From there I could easily import the `Grafo` class into python. **But**, .pyc files are
+python version specific, so I could only run them inside Python 3.10.0. *Boooringg*
+
+So, time to decompile 😈
+
+I finally found [pycdc](https://github.com/zrax/pycdc), which unfortunately has to be `make` compiled (that'll make things harder when integrating with `myrpl-cli` later on)
+
+pycdc then spat the following to stdout:
+
+```python
+# Source Generated with Decompyle++
+# File: grafo.pyc (Python 3.10)
+
+
+class Grafo:
+
+    def __init__(self, es_dirigido, vertices_init = (False, [])):
+        self.vertices = { }
+        for v in vertices_init:
+            self.vertices[v] = { }
+        self.es_dirigido = es_dirigido
+
+
+    def __contains__(self, v):
+        return v in self.vertices
+
+# and so on...
+```
+
+So, now comes the time to **integrate** this into `myrpl-cli`, which poses a challenge in itself.
 
 ## Contributing 🤝
 
