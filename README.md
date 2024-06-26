@@ -124,7 +124,7 @@ myrpl --help
 For help with the a specific command:
 
 ```bash
-myrpl {command} --help
+myrpl <command> --help
 ```
 
 ## Project Structure 🏗️
