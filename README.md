@@ -25,7 +25,7 @@ myrpl-cli is a command-line interface tool for fetching and saving course activi
 
     > While `myrpl` can't help you with your fantasies, it can certainly make your workflow smoother and more enjoyable. 😏
 
-## Installation 🛠️
+## 🛠️ Installation
 
 This project uses Poetry for dependency management. To install, follow these steps:
 
@@ -52,11 +52,11 @@ pipx install dist/myrpl_cli-0.2.0-py3-none-any.whl
 
 Now you can use the myrpl command! 🎉
 
-## Usage 📚
+## 📚 Usage
 
 To use myrpl-cli, you need a bearer token for authentication. You can provide this token either as an environment variable (even within a .env file) or as a command-line argument.
 
-### Logging In 🔑
+### 🔑 Logging In
 
 Before fetching course activities, you need
 to log in and store your credentials
@@ -70,7 +70,7 @@ This will prompt you for your username/email and password and store your credent
 
 You can always overwrite the stored credentials by running the `login` command again
 
-### (Optional) Setting up the bearer token 🛡️
+### 🛡️ (Optional) Setting up the bearer token
 
 Option 1: Set an environment variable
 
@@ -80,7 +80,7 @@ export MYRPL_BEARER_TOKEN=your_bearer_token_here
 
 Option 2: Provide the token as a command-line argument (see examples below)
 
-### Fetching course activities 🎓
+### 🎓 Fetching course activities
 
 First, `cd` into the directory where you want your courses and activities stored
 
@@ -106,14 +106,14 @@ This will create a file structure in the current working directory like follows:
 ┊   ┊
 ```
 
-### Getting some actual work done 🧑‍💻
+### 🧑‍💻 Getting some actual work done
 
 - `cd` into any activity
 - Launch your IDE of choice. eg.: `code .` for VS Code
 - You can see the activity's description, initial code and unit tests
 - Write your code and run the tests using `myrpl test` or just `pytest`
 
-### Getting help ❓
+### ❓ Getting help
 
 For general help:
 
@@ -127,7 +127,7 @@ For help with the a specific command:
 myrpl <command> --help
 ```
 
-## Project Structure 🏗️
+## 🏗️ Project Structure
 
 ```bash
 myrpl-cli/
@@ -141,7 +141,7 @@ myrpl-cli/
 └── myrpl.py
 ```
 
-## Development 👩‍💻👨‍💻
+## 👩‍💻👨‍💻 Development
 
 To set up the development environment:
 
@@ -165,19 +165,19 @@ poetry shell
 
 1. Off you go! 🚀
 
-### Tests 🧪
+### 🧪 Tests
 
 Use `pytest` to run the project's tests
 
 Use [act](https://github.com/nektos/act) for running the github workflow locally
 
-### Linting & Formatting 📝✅
+### 📝✅ Linting & Formatting
 
 I chose [ruff](https://github.com/astral-sh/ruff/) for linting + formatting
 
 > PD: I use the [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) VS Code extension, but you do you
 
-## Roadmap 🗺️
+## 🗺️ Roadmap
 
 - \[x\] Implement basic authentication functionality
 - \[x\] Fetch course activities
@@ -256,11 +256,11 @@ class Grafo:
 
 So, now comes the time to **integrate** this into `myrpl-cli`, which poses a challenge in itself.
 
-## Contributing 🤝
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License 📜
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -268,6 +268,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 It's actually 'My RPL' backwards. No, wait...
 
-## Authors 👥
+## 👥 Authors
 
 - tcorzo 🧑🏾‍🦲
