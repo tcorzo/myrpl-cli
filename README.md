@@ -174,6 +174,8 @@ I chose [flake8](https://pypi.org/project/flake8/) for linting
 - [x] Fetch course activities
 - [x] Store credentials securely for reuse
 - [x] Fetch latest submission
+- [ ] Implement hidden file .pyc download via submission abuse
+- [ ] Implement hidden file decompilation for python version agnostic test execution
 - [ ] Implement activity submission (`myrpl submit`)
 - [ ] Implement course/category/activity progress (`myrpl status`)
 - [ ] Remove annoying keyring passphrase
