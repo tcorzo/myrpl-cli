@@ -111,7 +111,7 @@ This will create a file structure in the current working directory like follows:
 - `cd` into any activity
 - Launch your IDE of choice. eg.: `code .` for VS Code
 - You can see the activity's description, initial code and unit tests
-- Write your code and run the tests using `pytest`
+- Write your code and run the tests using `myrpl test` or just `pytest`
 
 ### Getting help ❓
 
@@ -151,6 +151,12 @@ To set up the development environment:
 poetry install
 ```
 
+1. And pre-commit hooks:
+
+```bash
+pre-commit install
+```
+
 1. Activate the virtual environment:
 
 ```bash
@@ -167,10 +173,9 @@ Use [act](https://github.com/nektos/act) for running the github workflow locally
 
 ### Linting & Formatting 📝✅
 
-pre-commit install
-I chose [ruff](https://pypi.org/project/flake8/) for linting + formatting
+I chose [ruff](https://github.com/astral-sh/ruff/) for linting + formatting
 
-> PD: I use the [Ruff](https://marketplace.visualstudio.com/items?itemName=ms-python.pylint) and [autopep8](https://marketplace.visualstudio.com/items?itemName=ms-python.autopep8) extensions on VS Code, but you do you
+> PD: I use the [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) VS Code extension, but you do you
 
 ## Roadmap 🗺️
 
