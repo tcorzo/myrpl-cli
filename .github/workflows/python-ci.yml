@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-    name: "OS: ${{ matrix.os }} | Python ${{ matrix.python-version }}"
+    name: "${{ matrix.os }} | Python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10"]
 
     steps:
       - uses: actions/checkout@v4
