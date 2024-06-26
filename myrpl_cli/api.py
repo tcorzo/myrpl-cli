@@ -9,223 +9,171 @@ from myrpl_cli.errors import MissingCredentialsError
 from myrpl_cli.models import Course, Activity, Submission, SubmissionResult
 from myrpl_cli.credential_manager import CredentialManager
 
-BASE_URL = 'https://myrpl.ar'
+BASE_URL = "https://myrpl.ar"
 
 
 class API:
-    """API client for myrpl.ar"""
+	"""API client for myrpl.ar"""
 
-    def __init__(self, credential_manager: CredentialManager, bearer_token=None):
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
-            'Content-Type': 'application/json'
-        }
-        if bearer_token:
-            self.headers['Authorization'] = f"Bearer {bearer_token}"
-        self.credential_manager = credential_manager
+	def __init__(self, credential_manager: CredentialManager, bearer_token=None):
+		self.headers = {
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
+			"Content-Type": "application/json",
+		}
+		if bearer_token:
+			self.headers["Authorization"] = f"Bearer {bearer_token}"
+		self.credential_manager = credential_manager
 
-    def login(self, username_or_email, password):
-        """Obtains a bearer token given email & password"""
+	def login(self, username_or_email, password):
+		"""Obtains a bearer token given email & password"""
 
-        login_url = f'{BASE_URL}/api/auth/login'
-        payload = {
-            "username_or_email": username_or_email,
-            "password": password
-        }
-        response = requests.post(
-            login_url,
-            headers=self.headers,
-            data=json.dumps(payload),
-            timeout=10
-        )
-        response.raise_for_status()
+		login_url = f"{BASE_URL}/api/auth/login"
+		payload = {"username_or_email": username_or_email, "password": password}
+		response = requests.post(login_url, headers=self.headers, data=json.dumps(payload), timeout=10)
+		response.raise_for_status()
 
-        login_data = response.json()
+		login_data = response.json()
 
-        self.headers['Authorization'] = f"{login_data['token_type']} {login_data['access_token']}"
-        return login_data
+		self.headers["Authorization"] = f"{login_data['token_type']} {login_data['access_token']}"
+		return login_data
 
-    def fetch_courses(self) -> List[Course]:
-        """Fetches all courses"""
+	def fetch_courses(self) -> List[Course]:
+		"""Fetches all courses"""
 
-        courses_response = self.auth_api_call('get', f'{BASE_URL}/api/courses')
-        courses = [
-            Course(**course)
-            for course in courses_response
-        ]
-        return courses
+		courses_response = self.auth_api_call("get", f"{BASE_URL}/api/courses")
+		courses = [Course(**course) for course in courses_response]
+		return courses
 
-    def fetch_activities(self, course: Course) -> List[Activity]:
-        """Fetches all activities in a course"""
+	def fetch_activities(self, course: Course) -> List[Activity]:
+		"""Fetches all activities in a course"""
 
-        activities_response = self.auth_api_call(
-            'get',
-            f'{BASE_URL}/api/courses/{course.id}/activities'
-        )
-        activities = [
-            Activity(course=course, **activity)
-            for activity in activities_response
-        ]
-        return activities
+		activities_response = self.auth_api_call("get", f"{BASE_URL}/api/courses/{course.id}/activities")
+		activities = [Activity(course=course, **activity) for activity in activities_response]
+		return activities
 
-    def fetch_activity_info(self, activity: Activity) -> Activity:
-        """Fetches all info on an activity"""
+	def fetch_activity_info(self, activity: Activity) -> Activity:
+		"""Fetches all info on an activity"""
 
-        activity_info_response = self.auth_api_call(
-            'get',
-            f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}'
-        )
+		activity_info_response = self.auth_api_call(
+			"get",
+			f"{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}",
+		)
 
-        merged_activity_attrs = {
-            **activity.model_dump(),
-            **activity_info_response
-        }
+		merged_activity_attrs = {**activity.model_dump(), **activity_info_response}
 
-        return Activity(**merged_activity_attrs)
+		return Activity(**merged_activity_attrs)
 
-    def fetch_files(self, file_id: int) -> dict[str, str]:
-        """Fetches the initial code snippet for a given activity"""
+	def fetch_files(self, file_id: int) -> dict[str, str]:
+		"""Fetches the initial code snippet for a given activity"""
 
-        return self.auth_api_call(
-            'get',
-            f'{BASE_URL}/api/getFileForStudent/{file_id}'
-        )
+		return self.auth_api_call("get", f"{BASE_URL}/api/getFileForStudent/{file_id}")
 
-    def fetch_submissions(self, activity: Activity):
-        """Fetches all submissions for a given activity"""
+	def fetch_submissions(self, activity: Activity):
+		"""Fetches all submissions for a given activity"""
 
-        submissions_response = self.auth_api_call(
-            'get',
-            f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions'
-        )
-        submissions = [
-            Submission(activity=activity, **submission)
-            for submission in submissions_response
-        ]
-        return submissions
+		submissions_response = self.auth_api_call(
+			"get",
+			f"{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions",
+		)
+		submissions = [Submission(activity=activity, **submission) for submission in submissions_response]
+		return submissions
 
-    def fetch_final_submission(self, activity: Activity):
-        """Fetches the final (definitive) submission for a given activity"""
+	def fetch_final_submission(self, activity: Activity):
+		"""Fetches the final (definitive) submission for a given activity"""
 
-        final_submission_response = self.auth_api_call(
-            'get',
-            f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/finalSubmission'
-        )
-        return Submission(
-            activity=activity,
-            **final_submission_response,
-            is_final_solution=True
-        )
+		final_submission_response = self.auth_api_call(
+			"get",
+			f"{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/finalSubmission",
+		)
+		return Submission(activity=activity, **final_submission_response, is_final_solution=True)
 
-    def fetch_submission_result(self, submission: Submission) -> SubmissionResult:
-        """Fetches the result of a given submission"""
+	def fetch_submission_result(self, submission: Submission) -> SubmissionResult:
+		"""Fetches the result of a given submission"""
 
-        submission_result_response = self.auth_api_call(
-            'get',
-            f'{BASE_URL}/api/submissions/{submission.id}/result'
-        )
-        return SubmissionResult(
-            submission=submission,
-            activity=submission.activity,
-            **submission_result_response
-        )
+		submission_result_response = self.auth_api_call("get", f"{BASE_URL}/api/submissions/{submission.id}/result")
+		return SubmissionResult(
+			submission=submission,
+			activity=submission.activity,
+			**submission_result_response,
+		)
 
-    def submit(self, activity: Activity, submission_file: str, description: str = ""):
-        """Submits a submission for an activity"""
+	def submit(self, activity: Activity, submission_file: str, description: str = ""):
+		"""Submits a submission for an activity"""
 
-        mime_type, _ = mimetypes.guess_type(submission_file)
-        if mime_type is None:
-            mime_type = 'application/octet-stream'
+		mime_type, _ = mimetypes.guess_type(submission_file)
+		if mime_type is None:
+			mime_type = "application/octet-stream"
 
-        with open(submission_file, 'rb') as f:
-            form = MultipartEncoder(
-                fields={
-                    'file': (submission_file, f, mime_type),
-                    'description': description
-                }
-            )
+		with open(submission_file, "rb") as f:
+			form = MultipartEncoder(
+				fields={
+					"file": (submission_file, f, mime_type),
+					"description": description,
+				}
+			)
 
-        headers = self.headers.copy()
-        headers['Content-Type'] = form.content_type
+		headers = self.headers.copy()
+		headers["Content-Type"] = form.content_type
 
-        return self.auth_api_call(
-            'post',
-            f'{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions',
-            data=form,
-            headers=headers
-        )
+		return self.auth_api_call(
+			"post",
+			f"{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions",
+			data=form,
+			headers=headers,
+		)
 
-    def set_final_submission(self, submission: Submission) -> Submission:
-        """
-        Sets the submission as the final solution for an activity
-        """
+	def set_final_submission(self, submission: Submission) -> Submission:
+		"""
+		Sets the submission as the final solution for an activity
+		"""
 
-        final_submission_response = self.auth_api_call(
-            'put',
-            f'{BASE_URL}/api/courses/{submission.activity.course.id}\
+		final_submission_response = self.auth_api_call(
+			"put",
+			f"{BASE_URL}/api/courses/{submission.activity.course.id}\
                 /activities/{submission.activity.id}\
-                    /submissions/{submission.id}/final'
-        )
+                    /submissions/{submission.id}/final",
+		)
 
-        merged_submission_attrs = {
-            **submission.model_dump(),
-            **final_submission_response
-        }
+		merged_submission_attrs = {
+			**submission.model_dump(),
+			**final_submission_response,
+		}
 
-        return Submission(**merged_submission_attrs)
+		return Submission(**merged_submission_attrs)
 
-    def auth_api_call(self, method: str, url: str, **kwargs) -> dict:
-        """Makes a generic authed API call"""
+	def auth_api_call(self, method: str, url: str, **kwargs) -> dict:
+		"""Makes a generic authed API call"""
 
-        if self.headers.get('Authorization', None) is None:
-            self.headers['Authorization'] = f"Bearer {self.credential_manager.get_stored_token()}"
+		if self.headers.get("Authorization", None) is None:
+			self.headers["Authorization"] = f"Bearer {self.credential_manager.get_stored_token()}"
 
-        headers = {
-            **self.headers,
-            **(kwargs.get('headers', {}))
-        }
+		headers = {**self.headers, **(kwargs.get("headers", {}))}
 
-        try:
-            response = self.make_request(
-                method,
-                url,
-                **kwargs,
-                headers=headers
-            )
-        except requests.HTTPError as e:
-            if e.response.status_code == 401:
-                self.renew_token()
-                response = self.make_request(
-                    method,
-                    url,
-                    **kwargs,
-                    headers=headers
-                )
-            else:
-                raise e
+		try:
+			response = self.make_request(method, url, **kwargs, headers=headers)
+		except requests.HTTPError as e:
+			if e.response.status_code == 401:
+				self.renew_token()
+				response = self.make_request(method, url, **kwargs, headers=headers)
+			else:
+				raise e
 
-        return response.json()
+		return response.json()
 
-    def make_request(self, method: str, url: str, **kwargs) -> requests.Response:
-        """Makes a generic API call"""
+	def make_request(self, method: str, url: str, **kwargs) -> requests.Response:
+		"""Makes a generic API call"""
 
-        response = requests.request(
-            method,
-            url,
-            **kwargs,
-            timeout=10
-        )
-        response.raise_for_status()
-        return response
+		response = requests.request(method, url, **kwargs, timeout=10)
+		response.raise_for_status()
+		return response
 
-    def renew_token(self):
-        """Renews the API token using the stored credentials"""
+	def renew_token(self):
+		"""Renews the API token using the stored credentials"""
 
-        username, password = self.credential_manager.get_stored_credentials()
-        if not username or not password:
-            raise MissingCredentialsError(
-                "Stored credentials not found for token renewal")
+		username, password = self.credential_manager.get_stored_credentials()
+		if not username or not password:
+			raise MissingCredentialsError("Stored credentials not found for token renewal")
 
-        login_result = self.login(username, password)
-        self.credential_manager.store_token(login_result['access_token'])
-        self.headers['Authorization'] = f"Bearer {login_result['access_token']}"
+		login_result = self.login(username, password)
+		self.credential_manager.store_token(login_result["access_token"])
+		self.headers["Authorization"] = f"Bearer {login_result['access_token']}"

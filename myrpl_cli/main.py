@@ -12,75 +12,55 @@ logger = logging.getLogger(__name__)
 
 
 def login_command(myrpl: MyRPL):
-    myrpl.login()
+	myrpl.login()
 
 
 def fetch_command(myrpl: MyRPL, args):
-    try:
-        myrpl.fetch_course(args.course_id, args.token, args.force)
-    except MissingCredentialsError:
-        logger.error("You haven't logged in yet. Do so with `myrpl login`")
+	try:
+		myrpl.fetch_course(args.course_id, args.token, args.force)
+	except MissingCredentialsError:
+		logger.error("You haven't logged in yet. Do so with `myrpl login`")
 
 
 def test_command(myrpl: MyRPL, args):
-    try:
-        myrpl.test(args)
-    except NotMyRPLDirectoryError:
-        logger.error("not a myrpl directory: .myrpl")
+	try:
+		myrpl.test(args)
+	except NotMyRPLDirectoryError:
+		logger.error("not a myrpl directory: .myrpl")
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="CLI tool for MyRPL course activities")
-    subparsers = parser.add_subparsers(
-        dest="command", help="Available commands")
+	parser = argparse.ArgumentParser(description="CLI tool for MyRPL course activities")
+	subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # Login command
-    subparsers.add_parser(
-        "login",
-        help="Log in and store credentials"
-    )
+	# Login command
+	subparsers.add_parser("login", help="Log in and store credentials")
 
-    # Fetch command
-    fetch_parser = subparsers.add_parser(
-        "fetch",
-        help="Fetch and save activities for a given course ID"
-    )
-    fetch_parser.add_argument(
-        "course_id", type=int,
-        help="ID of the course to fetch activities from"
-    )
-    fetch_parser.add_argument(
-        "-t", "--token",
-        help="Bearer token for authentication."
-    )
-    fetch_parser.add_argument(
-        "-f", "--force", action="store_true",
-        help="Force overwrite of existing files"
-    )
+	# Fetch command
+	fetch_parser = subparsers.add_parser("fetch", help="Fetch and save activities for a given course ID")
+	fetch_parser.add_argument("course_id", type=int, help="ID of the course to fetch activities from")
+	fetch_parser.add_argument("-t", "--token", help="Bearer token for authentication.")
+	fetch_parser.add_argument("-f", "--force", action="store_true", help="Force overwrite of existing files")
 
-    # Test command
-    subparsers.add_parser(
-        "test",
-        help="Run the current course/category/activity tests"
-    )
+	# Test command
+	subparsers.add_parser("test", help="Run the current course/category/activity tests")
 
-    known_args, unknown_args = parser.parse_known_args()
+	known_args, unknown_args = parser.parse_known_args()
 
-    cred_mgr = CredentialManager()
-    api = API(cred_mgr)
-    myrpl = MyRPL(api, cred_mgr)
+	cred_mgr = CredentialManager()
+	api = API(cred_mgr)
+	myrpl = MyRPL(api, cred_mgr)
 
-    if known_args.command == "login":
-        login_command(myrpl)
-    elif known_args.command == "fetch":
-        fetch_command(myrpl, known_args)
-    elif known_args.command == "test":
-        # Pass both known and unknown args to test_command
-        test_command(myrpl, unknown_args)
-    else:
-        parser.print_help()
+	if known_args.command == "login":
+		login_command(myrpl)
+	elif known_args.command == "fetch":
+		fetch_command(myrpl, known_args)
+	elif known_args.command == "test":
+		# Pass both known and unknown args to test_command
+		test_command(myrpl, unknown_args)
+	else:
+		parser.print_help()
 
 
 if __name__ == "__main__":
-    main()
+	main()
