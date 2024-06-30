@@ -604,36 +604,6 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
-name = "pycdc"
-version = "0.0.1"
-description = "Python bindings for Decompyle++"
-optional = false
-python-versions = "<3.11,>3.7.6"
-files = []
-develop = false
-
-[package.source]
-type = "git"
-url = "https://github.com/percevalw/pycdc.git"
-reference = "pypi"
-resolved_reference = "89d57032dfbe2c77168af7e994da841b876eee6f"
-
-[[package]]
-name = "pycdc"
-version = "0.0.1"
-description = "Python bindings for Decompyle++"
-optional = false
-python-versions = "<3.11,>3.7.6"
-files = []
-develop = false
-
-[package.source]
-type = "git"
-url = "https://github.com/percevalw/pycdc.git"
-reference = "pypi"
-resolved_reference = "89d57032dfbe2c77168af7e994da841b876eee6f"
-
-[[package]]
 name = "pre-commit"
 version = "3.7.1"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
@@ -650,6 +620,21 @@ identify = ">=1.0.0"
 nodeenv = ">=0.11.1"
 pyyaml = ">=5.1"
 virtualenv = ">=20.10.0"
+
+[[package]]
+name = "pycdc"
+version = "0.0.1"
+description = "Python bindings for Decompyle++"
+optional = false
+python-versions = "<3.11,>3.7.6"
+files = []
+develop = false
+
+[package.source]
+type = "git"
+url = "https://github.com/percevalw/pycdc.git"
+reference = "pypi"
+resolved_reference = "89d57032dfbe2c77168af7e994da841b876eee6f"
 
 [[package]]
 name = "pycparser"
@@ -1114,4 +1099,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "d4e47c81f13a01e999fa03999cdcd27cf064df3dbde190947ab6be344cf0e2a9"
+content-hash = "16dbc2234a24aa4fd6127f782b71e08132a160b820a750139bf912ffe615ef11"
