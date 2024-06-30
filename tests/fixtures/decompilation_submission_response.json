@@ -1,0 +1,35 @@
+{
+    "id": 569096,
+    "activity_id": 5259,
+    "submission_file_name": "57_5259_2192",
+    "submission_file_type": "application/gzip",
+    "submission_file_id": 579801,
+    "is_iotested": false,
+    "activity_starting_files_name": "2023-08-03_57_Alumno más bajo.tar.gz",
+    "activity_starting_files_type": "application/gzip",
+    "activity_starting_files_id": 485090,
+    "activity_language": "python_3.7",
+    "activity_unit_tests": "import unittest\nimport timeout_decorator\nimport alumno\nimport random\nimport sys\nimport os\n\n\n# Disable\ndef blockPrint():\n    sys.stdout = open(os.devnull, 'w')\n\n# Restore\ndef enablePrint():\n    sys.stdout = sys.__stdout__\n\n\ndef without_print(fn):\n  try:\n    blockPrint()\n    fn()\n  finally:\n    enablePrint()\n\n\nclass AlumnoTest:\n    def __init__(self, nombre, altura):\n        self.nombre = nombre\n        self.altura = altura\n\n\ndef crear_alumnos(alturas):\n    alus = []\n    for i in range(len(alturas)):\n        alus.append(AlumnoTest(\"jaimito\" + str(i), alturas[i]))\n    return alus\n\n\nclass TestMethods(unittest.TestCase):\n\n    @timeout_decorator.timeout(1)  # segundos\n    def test_medio(self):\n        alus = crear_alumnos([1.5, 1.4, 1.3, 1.2, 1.14, 1.2, 1.23, 1.32])\n        without_print(lambda: self.assertEqual(alumno.indice_mas_bajo(alus), 4))\n        without_print(lambda: self.assertTrue(alumno.validar_mas_bajo(alus, 4)))\n        without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, 2)))\n\n    @timeout_decorator.timeout(1)  # segundos\n    def test_bastante_al_inicio(self):\n        alus = crear_alumnos([2, 0.8, 0.9, 1, 1.1, 1.2, 1.4, 1.41, 1.7])\n        without_print(lambda: self.assertEqual(alumno.indice_mas_bajo(alus), 1))\n        without_print(lambda: self.assertTrue(alumno.validar_mas_bajo(alus, 1)))\n        without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, 2)))\n\n    @timeout_decorator.timeout(1)  # segundos\n    def test_bastante_al_final(self):\n        alus = crear_alumnos([1.7, 1.41, 1.4, 1.2, 1.1, 1, 0.9, 0.8, 2])\n        without_print(lambda: self.assertEqual(alumno.indice_mas_bajo(alus), 7))\n        without_print(lambda: self.assertTrue(alumno.validar_mas_bajo(alus, 7)))\n        without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, 2)))\n\n    @timeout_decorator.timeout(6)  # segundos\n    def test_volumen(self):\n        n = 18768\n        k = random.randint(5, n - 5)\n        nums = [(n - k + i if i > k else n - i) for i in range(n)]\n        alus = crear_alumnos(nums)\n        for _ in range(n):\n            without_print(lambda: self.assertEqual(alumno.indice_mas_bajo(alus), k))\n            without_print(lambda: self.assertTrue(alumno.validar_mas_bajo(alus, k)))\n            without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, k + 1)))\n            without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, k - 1)))\n        k = 4\n        nums = [(n - k + i if i > k else n - i) for i in range(n)]\n        alus = crear_alumnos(nums)\n        without_print(lambda: self.assertEqual(alumno.indice_mas_bajo(alus), k))\n        without_print(lambda: self.assertTrue(alumno.validar_mas_bajo(alus, k)))\n        without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, k + 1)))\n        without_print(lambda: self.assertFalse(alumno.validar_mas_bajo(alus, k - 1)))\n",
+    "activity_iotests": [],
+    "submission_status": "FAILURE",
+    "is_final_solution": false,
+    "exit_message": "Completed all stages",
+    "stderr": "",
+    "stdout": "2024-03-25 13:23:17,682 RPL-2.0      INFO     Build Started\n2024-03-25 13:23:17,683 RPL-2.0      INFO     Building\n2024-03-25 13:23:17,683 RPL-2.0      INFO     start_BUILD\n/usr/bin/python3.10 /usr/custom_compileall.py\n2024-03-25 13:23:17,776 RPL-2.0      INFO     end_BUILD\n2024-03-25 13:23:17,776 RPL-2.0      INFO     Build Ended\n2024-03-25 13:23:17,776 RPL-2.0      INFO     Run Started\n2024-03-25 13:23:17,777 RPL-2.0      INFO     Running Unit Tests\n2024-03-25 13:23:17,777 RPL-2.0      INFO     start_RUN\n/usr/bin/python3.10 unit_test_wrapper.pyc\n2024-03-25 13:23:18,086 RPL-2.0      INFO     end_RUN\n2024-03-25 13:23:18,086 RPL-2.0      INFO     RUN OK\n2024-03-25 13:23:18,086 RPL-2.0      INFO     Run Ended\n",
+    "io_test_run_results": [],
+    "unit_test_run_results": [
+        {
+            "id": 1403361,
+            "test_name": "test_bastante_al_final",
+            "passed": false,
+            "error_messages": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.10/dist-packages/timeout_decorator/timeout_decorator.py\", line 82, in new_function\n    return function(*args, **kwargs)\n  File \"./unit_test.py\", line 39, in test_bastante_al_final\nAssertionError: 0 != 7\n"
+        },
+        {
+            "id": 1403362,
+            "test_name": "test_bastante_al_inicio",
+            "passed": false,
+            "error_messages": "Traceback (most recent call last):\n  File \"/usr/local/lib/python3.10/dist-packages/timeout_decorator/timeout_decorator.py\", line 82, in new_function\n    return function(*args, **kwargs)\n  File \"./unit_test.py\", line 32, in test_bastante_al_inicio\nAssertionError: 8 != 1\n"
+        }
+    ],
+    "submission_date": "2024-03-25T13:23:18Z"
+}
