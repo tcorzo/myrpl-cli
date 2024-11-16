@@ -3,6 +3,7 @@ name = "myrpl-cli"
 version = "1.0.0"
 description = "A script to fetch and save course activities from myrpl.ar"
 authors = ["tcorzo"]
+readme = "README.md"
 
 [tool.poetry.scripts]
 myrpl = "myrpl_cli.main:main"
