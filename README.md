@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/tcorzo/myrpl-cli/actions/workflows/python-ci.yml">
-        <img src="https://img.shields.io/github/actions/workflow/status/tcorzo/myrpl-cli/python-ci.yml?branch=main" alt="Build Status"/>
+        <img src="https://img.shields.io/github/actions/workflow/status/tcorzo/myrpl-cli/ci.yml?branch=main" alt="Build Status"/>
     </a>
     <a href="https://github.com/tcorzo/myrpl-cli/blob/main/LICENSE" >
         <img src="https://img.shields.io/github/license/tcorzo/myrpl-cli" alt="License"/>
