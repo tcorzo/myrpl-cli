@@ -27,27 +27,10 @@ myrpl-cli is a command-line interface tool for fetching and saving course activi
 
 ## 🛠️ Installation
 
-This project uses Poetry for dependency management. To install, follow these steps:
-
-1. Ensure you have Poetry installed. If not, install it from [Poetry's official website](https://python-poetry.org/docs/#installation).
-
-1. Clone this repository:
+Install the package globally using [pipx](https://github.com/pypa/pipx):
 
 ```bash
-git clone https://github.com/tcorzo/myrpl-cli.git
-cd myrpl-cli
-```
-
-1. Build the package:
-
-```bash
-poetry build
-```
-
-1. Install the package globally using [pipx](https://github.com/pypa/pipx):
-
-```bash
-pipx install dist/myrpl_cli-0.2.0-py3-none-any.whl
+pipx install myrpl-cli
 ```
 
 Now you can use the myrpl command! 🎉
@@ -56,7 +39,7 @@ Now you can use the myrpl command! 🎉
 
 To use myrpl-cli, you need a bearer token for authentication. You can provide this token either as an environment variable (even within a .env file) or as a command-line argument.
 
-### 🔑 Logging In
+### 1. 🔑 Logging In
 
 Before fetching course activities, you need
 to log in and store your credentials
@@ -70,17 +53,7 @@ This will prompt you for your username/email and password and store your credent
 
 You can always overwrite the stored credentials by running the `login` command again
 
-### 🛡️ (Optional) Setting up the bearer token
-
-Option 1: Set an environment variable
-
-```bash
-export MYRPL_BEARER_TOKEN=your_bearer_token_here
-```
-
-Option 2: Provide the token as a command-line argument (see examples below)
-
-### 🎓 Fetching course activities
+### 2. 🎓 Fetching course activities
 
 First, `cd` into the directory where you want your courses and activities stored
 
@@ -94,8 +67,8 @@ This will create a file structure in the current working directory like follows:
 
 ```bash
 ./
-└── courses/
-└── {course 1}/
+├── courses/
+├── {course 1}/
 ├── {category 1}/
 │   ├── description.txt
 │   ├── {activity 1}/
@@ -106,12 +79,22 @@ This will create a file structure in the current working directory like follows:
 ┊   ┊
 ```
 
-### 🧑‍💻 Getting some actual work done
+### 3. 🧑‍💻 Getting some actual work done
 
 - `cd` into any activity
 - Launch your IDE of choice. eg.: `code .` for VS Code
 - You can see the activity's description, initial code and unit tests
 - Write your code and run the tests using `myrpl test` or just `pytest`
+
+### 🛡️ (Optional) Setting up the bearer token
+
+Option 1: Set an environment variable
+
+```bash
+export MYRPL_BEARER_TOKEN=your_bearer_token_here
+```
+
+Option 2: Provide the token as a command-line argument (see examples below)
 
 ### ❓ Getting help
 
