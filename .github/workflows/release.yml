@@ -1,4 +1,4 @@
-name: Puplush
+name: Publish to PyPI
 
 on:
   workflow_run:
