@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "myrpl-cli"
-version = "0.2.0"
+version = "1.0.0"
 description = "A script to fetch and save course activities from myrpl.ar"
 authors = ["tcorzo"]
+readme = "README.md"
 
 [tool.poetry.scripts]
 myrpl = "myrpl_cli.main:main"
@@ -11,23 +12,24 @@ myrpl = "myrpl_cli.main:main"
 python = ">=3.10,<3.11"
 requests = "^2.25.1"
 python-dotenv = "^1.0.1"
-pytest = "^8.2.2"
-tqdm = "^4.66.4"
+pytest = "^8.3.3"
+tqdm = "^4.66.5"
 requests-toolbelt = "^1.0.0"
-keyring = "^25.2.1"
+keyring = "^25.4.1"
 keyrings-cryptfile = "^1.3.9"
 toml = "^0.10.2"
-pydantic = "^2.7.4"
+pydantic = "^2.9.2"
 
-# This requires python3-dev to be installed
+# This requires CMake to be installed
+# And python3-dev allegedly
 pycdc = { git = "https://github.com/percevalw/pycdc.git", branch = "pypi" }
 
 # myrpl test dependencies
 timeout-decorator = "^0.5.0"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.4.10"
-pre-commit = "^3.7.1"
+ruff = "^0.7.4"
+pre-commit = "^4.0.1"
 
 [build-system]
 requires = ["poetry>=0.12", "cmake>=3.18"]
