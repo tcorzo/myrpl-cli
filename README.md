@@ -131,6 +131,7 @@ To set up the development environment:
 1. Install all dependencies
 
 ```bash
+sudo apt-get install cmake # Required for pycdc
 poetry install
 ```
 
