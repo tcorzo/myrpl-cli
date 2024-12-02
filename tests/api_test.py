@@ -683,9 +683,11 @@ def test_auth_api_call_with_token_renewal(api):
 	and reattempt the api call
 	"""
 
-	with patch.object(api, "make_request") as mock_request, patch.object(
-		api, "renew_token"
-	) as mock_renew_token, patch.object(api.credential_manager, "get_stored_token") as mock_get_stored_token:
+	with (
+		patch.object(api, "make_request") as mock_request,
+		patch.object(api, "renew_token") as mock_renew_token,
+		patch.object(api.credential_manager, "get_stored_token") as mock_get_stored_token,
+	):
 		# The first call to make_request raises an HTTPError for 401
 		# The second call to make_request succeeds
 		mock_request.side_effect = [
