@@ -36,6 +36,18 @@ class Course(BaseModel):
 
 	id: int
 	name: str
+	university: str
+	university_course_id: str
+	description: str
+	active: bool
+	semester: str
+	semester_start_date: str
+	semester_end_date: str
+	img_uri: str
+	date_created: str
+	last_updated: str
+	enrolled: bool = False
+	accepted: bool = False
 
 	@computed_field
 	def metadata(self) -> MyRPLMetadata:
