@@ -128,6 +128,12 @@ myrpl-cli/
 
 To set up the development environment:
 
+1. Activate an env
+
+```bash
+poetry env use python
+```
+
 1. Install all dependencies
 
 ```bash
