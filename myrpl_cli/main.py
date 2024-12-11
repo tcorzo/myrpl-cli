@@ -29,12 +29,20 @@ def test_command(myrpl: MyRPL, args):
 		logger.error("not a myrpl directory: .myrpl")
 
 
+def list_command(myrpl: MyRPL, args):
+	myrpl.list(args.all)
+
+
 def main():
 	parser = argparse.ArgumentParser(description="CLI tool for MyRPL course activities")
 	subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
 	# Login command
 	subparsers.add_parser("login", help="Log in and store credentials")
+
+	# List command
+	list_parser = subparsers.add_parser("list", help="List all registered courses and their IDs")
+	list_parser.add_argument("-a", "--all", action="store_true", help="List all courses, including hidden ones")
 
 	# Fetch command
 	fetch_parser = subparsers.add_parser("fetch", help="Fetch and save activities for a given course ID")
@@ -53,6 +61,8 @@ def main():
 
 	if known_args.command == "login":
 		login_command(myrpl)
+	elif known_args.command == "list":
+		list_command(myrpl, known_args)
 	elif known_args.command == "fetch":
 		fetch_command(myrpl, known_args)
 	elif known_args.command == "test":
