@@ -5,6 +5,7 @@ from myrpl_cli.errors import MissingCredentialsError, NotMyRPLDirectoryError
 from myrpl_cli.myrpl import MyRPL
 from myrpl_cli.api import API
 from myrpl_cli.credential_manager import CredentialManager
+from myrpl_cli import __version__
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
@@ -52,6 +53,9 @@ def main():
 
 	# Test command
 	subparsers.add_parser("test", help="Run the current course/category/activity tests")
+
+	# Version
+	parser.add_argument("-v", "--version", action="version", version=f"%(prog)s {__version__}")
 
 	known_args, unknown_args = parser.parse_known_args()
 
