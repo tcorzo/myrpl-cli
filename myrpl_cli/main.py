@@ -55,7 +55,7 @@ def main():
 	subparsers.add_parser("test", help="Run the current course/category/activity tests")
 
 	# Version
-	parser.add_argument("-v", "--version", action="version", version=f"%(prog)s {__version__}")
+	parser.add_argument("-v", "--version", action="version", version=f"myrpl-cli {__version__}")
 
 	known_args, unknown_args = parser.parse_known_args()
 
