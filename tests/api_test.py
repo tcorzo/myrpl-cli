@@ -22,7 +22,20 @@ def mock_api(credential_manager):
 
 @pytest.fixture(name="course")
 def mock_course():
-	return Course(id=1, name="Test Course")
+	return Course(
+		id=1,
+		name="Test Course",
+		university="Test University",
+		university_course_id="1",
+		description="Test Description",
+		active=True,
+		semester="1C-2023",
+		semester_start_date="2023-01-01T00:00:00Z",
+		semester_end_date="2023-06-30T00:00:00Z",
+		img_uri="http://example.com/image.png",
+		date_created="2023-01-01T00:00:00Z",
+		last_updated="2023-01-01T00:00:00Z"
+	)
 
 
 @pytest.fixture(name="activity")
