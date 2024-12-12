@@ -8,6 +8,17 @@ readme = "README.md"
 [tool.poetry.scripts]
 myrpl = "myrpl_cli.main:main"
 
+[tool.semantic_release]
+version_variable = [
+    "myrpl_cli/__init__.py:__version__",
+    "pyproject.toml:version"
+]
+branch = "main"
+upload_to_pypi = true
+upload_to_release = true
+build_command = "pip install poetry && poetry build --no-interaction"
+
+
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 requests = "^2.25.1"
@@ -83,13 +94,3 @@ extend-ignore-re = [
 # [tool.markdownlint.MD024]
 # # Allow when nested under different parents e.g. CHANGELOG.md
 # siblings_only = true
-
-[tool.semantic_release]
-version_variable = [
-    "myrpl_cli/__init__.py:__version__",
-    "pyproject.toml:version"
-]
-branch = "main"
-upload_to_pypi = true
-upload_to_release = true
-build_command = "pip install poetry && poetry build --no-interaction"
