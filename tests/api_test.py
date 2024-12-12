@@ -34,7 +34,7 @@ def mock_course():
 		semester_end_date="2023-06-30T00:00:00Z",
 		img_uri="http://example.com/image.png",
 		date_created="2023-01-01T00:00:00Z",
-		last_updated="2023-01-01T00:00:00Z"
+		last_updated="2023-01-01T00:00:00Z",
 	)
 
 
