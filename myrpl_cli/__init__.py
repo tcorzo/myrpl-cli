@@ -1,3 +1,3 @@
 from importlib.metadata import version
 
-__version__ = version("myrpl-cli")
+__version__ = "0.1.0"
