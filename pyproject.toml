@@ -1,12 +1,49 @@
 [tool.poetry]
 name = "myrpl-cli"
-version = "1.0.0"
+version = "0.1.1"
 description = "A script to fetch and save course activities from myrpl.ar"
 authors = ["tcorzo"]
 readme = "README.md"
 
 [tool.poetry.scripts]
 myrpl = "myrpl_cli.main:main"
+
+[tool.semantic_release]
+version_variable = [
+	"myrpl_cli/__init__.py:__version__",
+	"pyproject.toml:version",
+]
+branch = "main"
+upload_to_pypi = true
+upload_to_release = true
+build_command = "pip install poetry && poetry build --no-interaction"
+
+[tool.semantic_release.commit_parser_options]
+major_tags = [":boom:"]
+minor_tags = [
+	":sparkles:",
+	":children_crossing:",
+	":lipstick:",
+	":iphone:",
+	":egg:",
+	":chart_with_upwards_trend:",
+]
+patch_tags = [
+	":ambulance:",
+	":lock:",
+	":bug:",
+	":zap:",
+	":goal_net:",
+	":alien:",
+	":wheelchair:",
+	":speech_balloon:",
+	":mag:",
+	":apple:",
+	":penguin:",
+	":checkered_flag:",
+	":robot:",
+	":green_apple:",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
@@ -28,7 +65,7 @@ pycdc = { git = "https://github.com/percevalw/pycdc.git", branch = "pypi" }
 timeout-decorator = "^0.5.0"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.7.4"
+ruff = ">=0.7.4,<0.9.0"
 pre-commit = "^4.0.1"
 
 [build-system]

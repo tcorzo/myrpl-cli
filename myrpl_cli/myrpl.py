@@ -39,6 +39,14 @@ class MyRPL:
 
 		return username, password
 
+	def list(self, all_courses=False):
+		"""Lists courses"""
+
+		courses = self.api.fetch_courses()
+		for course in courses:
+			if (course.enrolled and course.accepted) or all_courses:
+				print(f"{course.name}: {course.id}")
+
 	def fetch_course(self, course_id, token=None, force=False):
 		"""Fetches all activities for a course id and saves them"""
 

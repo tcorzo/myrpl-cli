@@ -22,7 +22,20 @@ def mock_api(credential_manager):
 
 @pytest.fixture(name="course")
 def mock_course():
-	return Course(id=1, name="Test Course")
+	return Course(
+		id=1,
+		name="Test Course",
+		university="Test University",
+		university_course_id="1",
+		description="Test Description",
+		active=True,
+		semester="1C-2023",
+		semester_start_date="2023-01-01T00:00:00Z",
+		semester_end_date="2023-06-30T00:00:00Z",
+		img_uri="http://example.com/image.png",
+		date_created="2023-01-01T00:00:00Z",
+		last_updated="2023-01-01T00:00:00Z",
+	)
 
 
 @pytest.fixture(name="activity")
@@ -683,9 +696,11 @@ def test_auth_api_call_with_token_renewal(api):
 	and reattempt the api call
 	"""
 
-	with patch.object(api, "make_request") as mock_request, patch.object(
-		api, "renew_token"
-	) as mock_renew_token, patch.object(api.credential_manager, "get_stored_token") as mock_get_stored_token:
+	with (
+		patch.object(api, "make_request") as mock_request,
+		patch.object(api, "renew_token") as mock_renew_token,
+		patch.object(api.credential_manager, "get_stored_token") as mock_get_stored_token,
+	):
 		# The first call to make_request raises an HTTPError for 401
 		# The second call to make_request succeeds
 		mock_request.side_effect = [
