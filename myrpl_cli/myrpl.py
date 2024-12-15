@@ -106,6 +106,26 @@ class MyRPL:
 		if meta.activity is not None:
 			logger.info("\t└──Activity: %s", meta.activity.name)
 
+	def submit(self, args):
+		"""
+		Submits a solution for the current activity
+		"""
+
+		meta = self.open_metadata()
+		if not meta or not meta.category or not meta.activity:
+			logger.error("can't submit outside an activity directory")
+			return
+
+		submission_file = f"./{meta.activity.code_files[0]}"
+
+		if not os.path.exists(submission_file):
+			logger.error(f"submission file not found: {submission_file}")
+			return
+
+		self.api.submit(meta, submission_file, args.description)
+
+		logger.info(f"Submitted {submission_file} for {meta.activity.name}")
+
 	def open_metadata(self) -> Optional[MyRPLMetadata]:
 		"""
 		Reads, parses and returns the current directory's metadata
@@ -152,6 +172,8 @@ class MyRPL:
 		code_files = self.get_code_files(activity)
 		code_files = {k: v for k, v in code_files.items() if k.endswith(".py")}
 
+		metadata = activity.metadata
+		metadata.code_files = list(code_files.keys())
 		files_to_save = {
 			".myrpl": toml.dumps(activity.metadata.model_dump()),
 			"description.md": activity.description,

@@ -33,6 +33,8 @@ def test_command(myrpl: MyRPL, args):
 def list_command(myrpl: MyRPL, args):
 	myrpl.list(args.all)
 
+def submit_command(myrpl: MyRPL, args):
+	myrpl.submit(args)
 
 def main():
 	parser = argparse.ArgumentParser(description="CLI tool for MyRPL course activities")
@@ -69,6 +71,8 @@ def main():
 		list_command(myrpl, known_args)
 	elif known_args.command == "fetch":
 		fetch_command(myrpl, known_args)
+	elif known_args.command == "submit":
+		submit_command(myrpl, known_args)
 	elif known_args.command == "test":
 		# Pass both known and unknown args to test_command
 		test_command(myrpl, unknown_args)

@@ -23,6 +23,7 @@ class ActivityMetadata(BaseModel):
 	id: int
 	name: str
 	description: str
+	code_files: List[str] = []
 
 
 class MyRPLMetadata(BaseModel):

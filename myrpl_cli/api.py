@@ -6,7 +6,7 @@ import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from myrpl_cli.errors import MissingCredentialsError
-from myrpl_cli.models import Course, Activity, Submission, SubmissionResult
+from myrpl_cli.models import Course, Activity, MyRPLMetadata, Submission, SubmissionResult
 from myrpl_cli.credential_manager import CredentialManager
 
 BASE_URL = "https://myrpl.ar"
@@ -97,17 +97,20 @@ class API:
 			**submission_result_response,
 		)
 
-	def submit(self, activity: Activity, submission_file: str, description: str = ""):
+	def submit(self, activity_meta: MyRPLMetadata, submission_filepath: str, description: str = ""):
 		"""Submits a submission for an activity"""
 
-		mime_type, _ = mimetypes.guess_type(submission_file)
+		if activity_meta.activity is None:
+			raise ValueError("Activity not found in metadata")
+
+		mime_type, _ = mimetypes.guess_type(submission_filepath)
 		if mime_type is None:
 			mime_type = "application/octet-stream"
 
-		with open(submission_file, "rb") as f:
+		with open(submission_filepath, "rb") as f:
 			form = MultipartEncoder(
 				fields={
-					"file": (submission_file, f, mime_type),
+					"file": (submission_filepath, f, mime_type),
 					"description": description,
 				}
 			)
@@ -117,7 +120,7 @@ class API:
 
 		return self.auth_api_call(
 			"post",
-			f"{BASE_URL}/api/courses/{activity.course.id}/activities/{activity.id}/submissions",
+			f"{BASE_URL}/api/courses/{activity_meta.course.id}/activities/{activity_meta.activity.id}/submissions",
 			data=form,
 			headers=headers,
 		)
