@@ -4,10 +4,10 @@ from unittest.mock import Mock, patch
 import pytest
 import requests
 
-from myrpl_cli.errors import MissingCredentialsError
-from myrpl_cli.credential_manager import CredentialManager
-from myrpl_cli.models import Course, Activity, Submission, SubmissionResult
 from myrpl_cli.api import API
+from myrpl_cli.credential_manager import CredentialManager
+from myrpl_cli.errors import MissingCredentialsError
+from myrpl_cli.models import Activity, Course, Submission, SubmissionResult
 
 
 @pytest.fixture(name="credential_manager")

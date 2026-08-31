@@ -1,11 +1,13 @@
-import logging
 import argparse
+import logging
+
 from dotenv import load_dotenv
-from myrpl_cli.errors import MissingCredentialsError, NotMyRPLDirectoryError
-from myrpl_cli.myrpl import MyRPL
+
+from myrpl_cli import __version__
 from myrpl_cli.api import API
 from myrpl_cli.credential_manager import CredentialManager
-from myrpl_cli import __version__
+from myrpl_cli.errors import MissingCredentialsError, NotMyRPLDirectoryError
+from myrpl_cli.myrpl import MyRPL
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
