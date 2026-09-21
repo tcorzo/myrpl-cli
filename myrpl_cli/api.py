@@ -1,13 +1,12 @@
-from typing import List
-import mimetypes
 import json
+import mimetypes
 
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from myrpl_cli.errors import MissingCredentialsError
-from myrpl_cli.models import Course, Activity, Submission, SubmissionResult
 from myrpl_cli.credential_manager import CredentialManager
+from myrpl_cli.errors import MissingCredentialsError
+from myrpl_cli.models import Activity, Course, Submission, SubmissionResult
 
 BASE_URL = "https://myrpl.ar"
 
@@ -37,14 +36,14 @@ class API:
 		self.headers["Authorization"] = f"{login_data['token_type']} {login_data['access_token']}"
 		return login_data
 
-	def fetch_courses(self) -> List[Course]:
+	def fetch_courses(self) -> list[Course]:
 		"""Fetches all courses"""
 
 		courses_response = self.auth_api_call("get", f"{BASE_URL}/api/courses")
 		courses = [Course(**course) for course in courses_response]
 		return courses
 
-	def fetch_activities(self, course: Course) -> List[Activity]:
+	def fetch_activities(self, course: Course) -> list[Activity]:
 		"""Fetches all activities in a course"""
 
 		activities_response = self.auth_api_call("get", f"{BASE_URL}/api/courses/{course.id}/activities")

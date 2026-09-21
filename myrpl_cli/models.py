@@ -1,4 +1,4 @@
-from typing import List, Optional, Literal
+from typing import Literal
 
 from pydantic import BaseModel, computed_field, field_validator
 
@@ -27,8 +27,8 @@ class ActivityMetadata(BaseModel):
 
 class MyRPLMetadata(BaseModel):
 	course: CourseMetadata
-	category: Optional[CategoryMetadata] = None
-	activity: Optional[ActivityMetadata] = None
+	category: CategoryMetadata | None = None
+	activity: ActivityMetadata | None = None
 
 
 class Course(BaseModel):
@@ -98,24 +98,16 @@ class Activity(BaseModel):
 	description: str
 
 	language: str
-	activity_unit_tests: Optional[str] = None
+	activity_unit_tests: str | None = None
 	file_id: int
-	submission_status: Optional[
-		Literal[
-			"PENDING",
-			"ENQUEUED",
-			"PROCESSING",
-			"BUILD_ERROR",
-			"RUNTIME_ERROR",
-			"FAILURE",
-			"SUCCESS",
-			"TIME_OUT",
-		]
-	] = None
+	submission_status: (
+		Literal["PENDING", "ENQUEUED", "PROCESSING", "BUILD_ERROR", "RUNTIME_ERROR", "FAILURE", "SUCCESS", "TIME_OUT"]
+		| None
+	) = None
 
 	@field_validator("submission_status", mode="before")
 	@classmethod
-	def empty_str_to_none(cls, v: str) -> Optional[str]:
+	def empty_str_to_none(cls, v: str) -> str | None:
 		"""Coerses empty string to None"""
 		if v == "":
 			return None
@@ -138,7 +130,7 @@ class UnitTestResult(BaseModel):
 	id: int
 	test_name: str
 	passed: bool
-	error_messages: Optional[str] = None
+	error_messages: str | None = None
 
 
 class Submission(BaseModel):
@@ -146,7 +138,7 @@ class Submission(BaseModel):
 
 	@field_validator("submission_status", mode="before")
 	@classmethod
-	def empty_str_to_none(cls, v: str) -> Optional[str]:
+	def empty_str_to_none(cls, v: str) -> str | None:
 		"""Coerses empty string to None"""
 		if v == "":
 			return None
@@ -162,26 +154,18 @@ class Submission(BaseModel):
 	activity_starting_files_type: str
 	activity_starting_files_id: int
 	activity_language: str
-	activity_unit_tests: Optional[str] = None
-	submission_status: Optional[
-		Literal[
-			"PENDING",
-			"ENQUEUED",
-			"PROCESSING",
-			"BUILD_ERROR",
-			"RUNTIME_ERROR",
-			"FAILURE",
-			"SUCCESS",
-			"TIME_OUT",
-		]
-	] = None
-	is_final_solution: Optional[bool] = None
-	exit_message: Optional[str] = None
-	stderr: Optional[str] = None
-	stdout: Optional[str] = None
-	io_test_run_results: List[dict] = []
-	unit_test_run_results: List[UnitTestResult] = []
-	submission_date: Optional[str] = None
+	activity_unit_tests: str | None = None
+	submission_status: (
+		Literal["PENDING", "ENQUEUED", "PROCESSING", "BUILD_ERROR", "RUNTIME_ERROR", "FAILURE", "SUCCESS", "TIME_OUT"]
+		| None
+	) = None
+	is_final_solution: bool | None = None
+	exit_message: str | None = None
+	stderr: str | None = None
+	stdout: str | None = None
+	io_test_run_results: list[dict] = []
+	unit_test_run_results: list[UnitTestResult] = []
+	submission_date: str | None = None
 
 
 class SubmissionResult(Submission):

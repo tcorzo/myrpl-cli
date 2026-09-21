@@ -1,16 +1,15 @@
-import os
-import logging
 import getpass
-from typing import Optional
+import logging
+import os
 
 import pytest
 import toml
 from tqdm import tqdm
 
-from myrpl_cli.errors import AuthError, NotMyRPLDirectoryError
-from myrpl_cli.models import Activity, MyRPLMetadata
 from myrpl_cli.api import API
 from myrpl_cli.credential_manager import CredentialManager
+from myrpl_cli.errors import AuthError, NotMyRPLDirectoryError
+from myrpl_cli.models import Activity, MyRPLMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +105,7 @@ class MyRPL:
 		if meta.activity is not None:
 			logger.info("\t└──Activity: %s", meta.activity.name)
 
-	def open_metadata(self) -> Optional[MyRPLMetadata]:
+	def open_metadata(self) -> MyRPLMetadata | None:
 		"""
 		Reads, parses and returns the current directory's metadata
 		"""
