@@ -168,18 +168,34 @@ I chose [ruff](https://github.com/astral-sh/ruff/) for linting + formatting
 
 ## 🗺️ Roadmap
 
-- \[x\] Implement basic authentication functionality
-- \[x\] Fetch course activities
-- \[x\] Store credentials securely for reuse
-- \[x\] Fetch latest submission
-- \[ \] Implement hidden file .pyc download via submission abuse (branch: `feature/hidden_file_decompilation`)
-- \[ \] Implement hidden file decompilation for python version agnostic test execution
-- \[ \] Implement activity submission (`myrpl submit`)
-- \[ \] Implement course/category/activity progress (`myrpl status`)
-- \[ \] Remove annoying keyring passphrase
-- \[ \] Enhance test coverage
-- \[ \] VS Code extension (?)
-- \[ \] Add support for additional programming languages (idk if actually necessary)
+- \[x\]
+- \[x\]
+- \[x\]
+- \[x\]
+- \[
+
+    \]
+- \[
+
+    \]
+- \[
+
+    \]
+- \[
+
+    \]
+- \[
+
+    \]
+- \[
+
+    \]
+- \[
+
+    \]
+- \[
+
+    \]
 
 Please note that this roadmap is subject to change and may be updated based on user feedback and my own time 😁
 
